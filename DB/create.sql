@@ -5,19 +5,19 @@ SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 
 -- -----------------------------------------------------
--- Schema shipping
+-- Schema employee
 -- -----------------------------------------------------
 
 -- -----------------------------------------------------
--- Schema shipping
+-- Schema employee
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `shipping` DEFAULT CHARACTER SET utf8 ;
-USE `shipping` ;
+CREATE SCHEMA IF NOT EXISTS `employee` DEFAULT CHARACTER SET utf8 ;
+USE `employee` ;
 
 -- -----------------------------------------------------
--- Table `shipping`.`user`
+-- Table `employee`.`user`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `shipping`.`user` (
+CREATE TABLE IF NOT EXISTS `employee`.`user` (
   `user_id` INT NOT NULL AUTO_INCREMENT,
   `username` VARCHAR(16) NOT NULL,
   `email` VARCHAR(255) NOT NULL,
@@ -28,104 +28,87 @@ CREATE TABLE IF NOT EXISTS `shipping`.`user` (
   `firstname` VARCHAR(255) NULL,
   `lastname` VARCHAR(255) NULL,
   `create_time` INT NULL,
-  `type` INT NULL,
+  `type_id` INT NULL,
+  `password` VARCHAR(255) NOT NULL,
   UNIQUE INDEX `username_UNIQUE` (`username` ASC),
-  PRIMARY KEY (`user_id`, `email`, `username`));
+  PRIMARY KEY (`user_id`, `email`, `username`),
+  UNIQUE INDEX `email_UNIQUE` (`email` ASC));
 
 
 -- -----------------------------------------------------
--- Table `shipping`.`country`
+-- Table `employee`.`country`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `shipping`.`country` (
+CREATE TABLE IF NOT EXISTS `employee`.`country` (
   `country_id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(24) NULL,
   PRIMARY KEY (`country_id`));
 
 
 -- -----------------------------------------------------
--- Table `shipping`.`category`
+-- Table `employee`.`project`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `shipping`.`category` (
-  `category_id` INT NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(255) NOT NULL,
-  `unit` VARCHAR(45) NULL,
-  `price` FLOAT NULL,
-  PRIMARY KEY (`category_id`));
+CREATE TABLE IF NOT EXISTS `employee`.`project` (
+  `project_id` INT NOT NULL AUTO_INCREMENT,
+  `project_name` VARCHAR(255) NOT NULL,
+  `customer_id` VARCHAR(45) NULL,
+  PRIMARY KEY (`project_id`));
 
 
 -- -----------------------------------------------------
--- Table `shipping`.`services`
+-- Table `employee`.`type`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `shipping`.`services` (
-  `service_id` INT NOT NULL AUTO_INCREMENT,
-  `servicename` VARCHAR(255) NULL,
-  PRIMARY KEY (`service_id`));
+CREATE TABLE IF NOT EXISTS `employee`.`type` (
+  `type_id` INT NOT NULL AUTO_INCREMENT,
+  `description` VARCHAR(255) NULL,
+  PRIMARY KEY (`type_id`));
 
 
 -- -----------------------------------------------------
--- Table `shipping`.`shipping_detail`
+-- Table `employee`.`task`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `shipping`.`shipping_detail` (
-  `detail_id` INT NOT NULL AUTO_INCREMENT,
-  `type` INT NULL,
-  `weight` INT NOT NULL,
-  `from` INT NULL,
-  `to` INT NULL,
-  `category` INT NULL,
-  `container` INT NULL,
-  `received_date` INT NULL,
-  PRIMARY KEY (`detail_id`));
-
-
--- -----------------------------------------------------
--- Table `shipping`.`shipping`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `shipping`.`shipping` (
-  `shipping_id` INT NOT NULL AUTO_INCREMENT,
-  `detail_id` INT NOT NULL,
+CREATE TABLE IF NOT EXISTS `employee`.`task` (
+  `task_id` INT NOT NULL AUTO_INCREMENT,
+  `project_id` INT NOT NULL,
   `create_time` INT NULL,
   `approved` VARCHAR(1) NULL,
-  `ref_price` FLOAT NULL,
-  `exact_price` FLOAT NULL,
-  `ref_time` INT NOT NULL,
-  `status` INT NULL,
-  `user_id` INT NULL,
-  `exact_time` INT NULL,
-  PRIMARY KEY (`shipping_id`));
+  `status_id` INT NULL,
+  `assignee_id` INT NULL,
+  `estimate` INT NULL,
+  `log_work` VARCHAR(10) NULL,
+  `description` VARCHAR(255) NULL,
+  `reporter_id` INT NULL,
+  PRIMARY KEY (`task_id`));
 
 
 -- -----------------------------------------------------
--- Table `shipping`.`payment`
+-- Table `employee`.`payment`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `shipping`.`payment` (
+CREATE TABLE IF NOT EXISTS `employee`.`payment` (
   `payment_id` INT NOT NULL AUTO_INCREMENT,
-  `method_id` INT NULL,
-  `shipping_id` INT NULL,
-  `create_time` INT NULL,
-  `status` INT NULL,
+  `user_id` INT NULL,
+  `salary` FLOAT NULL,
   PRIMARY KEY (`payment_id`));
 
 
 -- -----------------------------------------------------
--- Table `shipping`.`method`
+-- Table `employee`.`places`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `shipping`.`method` (
-  `method_id` INT NOT NULL AUTO_INCREMENT,
-  `description` VARCHAR(255) NULL,
-  PRIMARY KEY (`method_id`));
-
-
--- -----------------------------------------------------
--- Table `shipping`.`places`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `shipping`.`places` (
+CREATE TABLE IF NOT EXISTS `employee`.`places` (
   `place_id` INT NOT NULL AUTO_INCREMENT,
   `country` VARCHAR(255) NULL,
   `city` VARCHAR(255) NULL,
   `address` VARCHAR(255) NULL,
-  `postcode` VARCHAR(45) NULL,
   PRIMARY KEY (`place_id`),
   UNIQUE INDEX `place_id_UNIQUE` (`place_id` ASC));
+
+
+-- -----------------------------------------------------
+-- Table `employee`.`status`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `employee`.`status` (
+  `status_id` INT NOT NULL AUTO_INCREMENT,
+  `description` VARCHAR(255) NULL,
+  PRIMARY KEY (`status_id`));
 
 
 SET SQL_MODE=@OLD_SQL_MODE;

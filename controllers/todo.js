@@ -1,6 +1,6 @@
 //add todo
 module.exports.add_todo = function(req, res){
-	if(typeof req.session.id!='undefined'){
+	if(typeof req.session.user_id!='undefined'){
 		data={title:'Add todo | '+req.session.fname,fname:req.session.fname};
 		res.render('add_todo',data);
 	}

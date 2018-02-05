@@ -3,7 +3,8 @@
 module.exports.signup=function(req,res){
 	var input = JSON.parse(JSON.stringify(req.body));
 	var dt_join=Math.round(+new Date()/1000);
-
+	var birth = input.dob.split("/");
+	var newDOB = birth[2]+birth[0]+birth[1];
 		passwd=md5(input.password);
 		var dataUser = {
 			username:input.username,
@@ -12,7 +13,7 @@ module.exports.signup=function(req,res){
             phone    : input.phone,
             firstname    : input.fname,
             lastname : input.lname,
-            dob:input.dob,
+            dob:newDOB,
             password:passwd,
             create_time:dt_join
 		};
@@ -35,12 +36,13 @@ module.exports.login=function(req,res){
 			password:md5(input.password)
 		};
 	req.models.user.find(data, function(err, rows,next) {
-		if(err){ 
+		if(err){
 			console.log(err);
 		}
 		if(rows.length>0){
-			req.session.fname=rows[0].fname;
-			req.session.id=rows[0].id;
+			req.session.firstname=rows[0].firstname;
+			req.session.user_id=rows[0].user_id;
+			console.log(rows);
 		}
 		res.redirect('/');
 		});
