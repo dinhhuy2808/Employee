@@ -1,15 +1,28 @@
 <%- include layout/header.ejs %>
 <div class="mid">
-<div><img src="./images/profile/thumb/<%=data.pic%>" width="50" style="vertical-align:middle;">&nbsp;<b><%=data.fname%></b>&nbsp;|&nbsp;<a href="/logout">Logout</a></div>
-<h1>Todo List</h1>
-<a href="add-todo">Add Todo</a>&nbsp;|&nbsp;<a href="export-excel">Export Excel</a>
-<table width="100%" cellpadding="5">
-<tr>
-<td width="5%">Sl.</td><td width="20%">Date</td><td width="70%">Job</td><td width="5%">&nbsp;</td>
-</tr>
-<%for(i=0;i<todo.length;i++){%>
-<tr><td><%=i+1%></td><td><%=dateFormat(todo[i].add_date*1000, "dd-mm-yyyy")%></td><td><%=todo[i].job%></td><td><a href="/edit-todo/<%=todo[i].id%>">Edit</a>&nbsp;|&nbsp;<a href="/delete-todo/<%=todo[i].id%>">Delete</a></td></tr>
-<%}%>
-</table>
+    <div><img src="./images/profile/thumb/<%= data.pic %>" width="50"
+              style="vertical-align:middle;">&nbsp;<b><%= data.fname %></b>&nbsp;|&nbsp;<a href="/logout">Logout</a>
+    </div>
+    <h1>Todo List</h1>
+    <a href="add-project">Add Project</a>&nbsp;|&nbsp;<a href="export-excel">Export Excel</a>
+    <table width="100%" cellpadding="5">
+        <tr>
+            <td width="5%">Sl.</td>
+            <td width="70%">Project Name</td>
+            <td width="70%">Customer ID</td>
+            <td width="20%">Project Code</td>
+            <td width="70%">&nbsp;</td>
+        </tr>
+        <% for(i = 0;i < project.length;i++){ %>
+        <tr>
+            <td><%= i+1 %></td>
+            <td><%= project[i].project_name %></td>
+            <td><%= project[i].customer_id %></td>
+            <td><%= project[i].code %></td>
+            <td><a href="/edit-project/<%= project[i].project_id%>">Edit</a>&nbsp;|&nbsp;<a href="/delete-project/<%= project[i].project_id %>">Delete</a>&nbsp;|&nbsp;<a href="/delete-todo/<%= project[i].project_id %>">Show Task</a>&nbsp;|&nbsp;<a href="/delete-todo/<%= project[i].project_id %>">Add Task</a>
+            </td>
+        </tr>
+        <% } %>
+    </table>
 </div>
 <%- include layout/footer.ejs %>

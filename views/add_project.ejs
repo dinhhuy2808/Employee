@@ -1,0 +1,36 @@
+<%- include layout/header.ejs %>
+<div class="mid">
+<div><b><%=data.fname%></b>&nbsp;|&nbsp;<a href="/logout">Logout</a></div>
+<h1>Add Todo List</h1>
+<form action="save-project" method="post">
+    <table>
+        <tr>
+            <td>
+                <label>Project Name</label>
+                <textarea name="projname" required></textarea>
+            </td>
+
+        </tr>
+        <tr>
+            <td>
+                <label>Project Code</label>
+                <input type="text" name="code" id="code" required>
+            </td>
+
+        </tr>
+        <tr>
+            <td>
+                <label>Customer Account/Email</label>
+                <input type="text" name="email" id="email" required>
+            </td>
+            <td>
+                <input type="text" name="name" id="name" disabled>
+            </td>
+        </tr>
+    </table>
+
+
+<input type="submit" value="Add">
+</form>
+</div>
+<%- include layout/footer.ejs %>

@@ -4,7 +4,10 @@ module.exports=function(app,controllers){
 		app.post('/ajax/checkEmail',controllers.ajax.checkEmail);
 		app.post('/login',controllers.account.login);
 		app.get('/logout',controllers.account.logout);
-		app.get('/add-todo',controllers.todo.add_todo);
+		app.get('/add-project',controllers.todo.add_project);
+		app.post('/save-project',controllers.todo.save_project);
+		app.get('/edit-project/:id',controllers.todo.edit_project);
+		app.get('/delete-project/:id',controllers.todo.delete_project);
 		app.post('/save-todo',controllers.todo.save_todo);
 		app.get('/edit-todo/:id',controllers.todo.edit_todo);
 		app.get('/delete-todo/:id',controllers.todo.delete_todo);

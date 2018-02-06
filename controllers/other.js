@@ -18,7 +18,7 @@ module.exports.export_excel=function(req,res){
 			width:15
 		}
 		];
-		req.models.todo.find({user_id:req.session.id},function(err,rows){
+		req.models.user.find({user_id:req.session.user_id},function(err,rows){
 			if(err){
 				console.log(err);
 				res.redirect('/');

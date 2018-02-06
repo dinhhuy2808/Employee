@@ -1,0 +1,1 @@
+alter table project add column code varchar(10) not null;
