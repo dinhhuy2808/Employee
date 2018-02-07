@@ -63,7 +63,7 @@ module.exports.edit_project=function(req,res){
             console.log(err);
         }
         else{
-            data={title:'Edit Project | '+req.session.fname,fname:req.session.fname,project:rows};
+            data={title:'Edit Project | '+req.session.firstname,fname:req.session.firstname,project:rows};
             res.render('edit_project',data);
         }
     });
