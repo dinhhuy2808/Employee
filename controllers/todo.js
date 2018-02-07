@@ -34,7 +34,7 @@ module.exports.save_project=function(req,res){
                     }
                     else{
                     }
-                    res.redirect('/');
+
                 });
             }
             else{
@@ -43,18 +43,20 @@ module.exports.save_project=function(req,res){
                         console.log(err);
                     }
                     else{
-                        rows.job=input.job;
-                        rows.save(function(err){
+                        rows.project_name=input.projname;
+                        rows.code=input.code;
+                        rows.customer_id=input.email;
+                        rows.save(data,function(err){
                             console.log('saved');
                         });
                     }
-                    res.redirect('/');
+                   /* res.redirect('/');*/
                 });
             }
         }
 
     });
-
+    res.redirect('/');
 };
 //edit project
 module.exports.edit_project=function(req,res){

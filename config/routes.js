@@ -2,6 +2,8 @@ module.exports=function(app,controllers){
 		app.get('/',controllers.index.home);
 		app.post('/signup',controllers.account.signup);
 		app.post('/ajax/checkEmail',controllers.ajax.checkEmail);
+    	app.post('/ajax/checkEmailAddProject',controllers.ajax.checkEmailAddProject);
+    	app.post('/ajax/checkProjectCode',controllers.ajax.checkProjectCode);
 		app.post('/login',controllers.account.login);
 		app.get('/logout',controllers.account.logout);
 		app.get('/add-project',controllers.todo.add_project);
