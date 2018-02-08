@@ -1,0 +1,144 @@
+<!DOCTYPE HTML>
+<html>
+<%- include layout/header.ejs %>
+<body>
+
+
+<div class="mid">
+    <div><b><%= data.fname %></b>&nbsp;|&nbsp;<a href="/logout">Logout</a></div>
+    <h1>Add Todo List</h1>
+    <form action="save-task" method="post" enctype="multipart/form-data">
+        <table>
+            <tr>
+                <td>
+                    <label>Task Code</label>
+                    <input name="taskcode" id = "taskcode" value = '<%=task_code%>' required disabled>
+                </td>
+
+            </tr>
+            <tr>
+                <td>
+                    <label>Desciption</label>
+                    <textarea type="text" name="description" id="description" required></textarea>
+                </td>
+
+            </tr>
+            <tr>
+                <td>
+                    <label>Assignee</label>
+                    <input type="text" name="assignee" id="assignee" required>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>Estimate</label>
+                    <input type="text" name="estimate" id="estimate" required>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>Work Log</label>
+                    <input type="text" name="log" id="log" required disabled>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>Status</label>
+                    <input type="text" name="status" id="status" required disabled>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>Approved</label>
+                    <input type="text" name="approved" id="approved" required disabled>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>Creator</label>
+                    <input type="text" name="creator" id="creator" value = '<%=creator%>' required disabled>
+                </td>
+            </tr>
+        </table>
+
+
+        <input type="submit" value="Add" id = "add" style="display: none" onclick='buttonAdd()'>
+    </form>
+</div>
+</body>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#email').keyup(function () {
+            $(".error").remove();
+            var obj = $(this);
+            $.ajax({
+                type: "POST",
+                url: "./ajax/checkEmailAddProject",
+                data: "mode=checkEmailAddProject&email=" + obj.val(),
+                success: function (msg) {
+                    //alert(msg);
+                    data = msg;
+                    if (data.status == 'exist') {
+                       /* obj.after("<label class='error'>Email Id Aleady Exist</label>");*/
+                        /*$("#frmId .btn").attr('disabled', 'disabled');*/
+                        document.getElementById('name').value = data.name;
+                        document.getElementById('add').style.display = 'block';
+                    }
+                    else {
+                        document.getElementById('add').style.display = 'none';
+                       /* $("#frmId .btn").removeAttr('disabled');*/
+                    }
+                }
+            });
+        });
+
+    });
+
+    $(document).ready(function () {
+        $('#code').keyup(function () {
+            $(".error").remove();
+            var obj = $(this);
+            $.ajax({
+                type: "POST",
+                url: "./ajax/checkProjectCode",
+                data: "mode=checkProjectCode&code=" + obj.val(),
+                success: function (msg) {
+                    //alert(msg);
+                    data = msg;
+                    if (data.status == 'exist') {
+                        obj.after("<label class='error'>Project Code Is Aleady Exist</label>");
+                        document.getElementById('add').style.display = 'none';
+                        /*$("#frmId .btn").attr('disabled', 'disabled');*/
+                       /* document.getElementById('name').value = data.name;*/
+                        /*document.getElementById('add').style.display = 'block';*/
+                    }
+                    else {
+                        /* $("#frmId .btn").removeAttr('disabled');*/
+                        document.getElementById('add').style.display = 'block';
+                    }
+                }
+            });
+        });
+
+    });
+</script>
+<script>
+    /*function buttonAdd(){
+        var prjNameVal = document.getElementById('projname');
+        var prjcCodeVal = document.getElementById('code');
+        var emailVal = document.getElementById('email');
+        if(prjNameVal.value.trim() == ''){
+            prjNameVal.after("<label class='error'>Project Name Is Mandatory</label>")
+        }
+        if(prjcCodeVal.value.trim() == ''){
+            prjcCodeVal.after("<label class='error'>Project Code Is Mandatory</label>")
+        }
+        if(emailVal.value.trim() == ''){
+            emailVal.after("<label class='error'>Email Is Mandatory</label>")
+        }
+    }
+*/
+
+</script>
+<%- include layout/footer.ejs %>
+</html>

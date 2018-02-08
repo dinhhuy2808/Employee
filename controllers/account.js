@@ -23,6 +23,7 @@ module.exports.signup=function(req,res){
 		}
 		if(rows.user_id){
 			req.session.fname=rows.firstname;
+            req.session.lastname=rows.lastname;
 			req.session.id=rows.user_id;
 		}
 		res.redirect('/');
@@ -41,6 +42,7 @@ module.exports.login=function(req,res){
 		}
 		if(rows.length>0){
 			req.session.firstname=rows[0].firstname;
+            req.session.lastname=rows[0].lastname;
 			req.session.user_id=rows[0].user_id;
 			console.log(rows);
 		}

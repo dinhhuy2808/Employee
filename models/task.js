@@ -9,6 +9,7 @@ module.exports = function (orm, db) {
         estimate: {type: 'number'},
         log_work: {type: 'text'},
         description: {type: 'text'},
-        reporter_id: {type: 'number'}
+        reporter_id: {type: 'number'},
+        task_code: {type: 'text'}
     });
 };

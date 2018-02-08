@@ -19,7 +19,7 @@
             <td><%= project[i].project_name %></td>
             <td><%= project[i].customer_id %></td>
             <td><%= project[i].code %></td>
-            <td><a href="/edit-project/<%= project[i].project_id%>">Edit</a>&nbsp;|&nbsp;<a href="/delete-project/<%= project[i].project_id %>">Delete</a>&nbsp;|&nbsp;<a href="/delete-todo/<%= project[i].project_id %>">Show Task</a>&nbsp;|&nbsp;<a href="/delete-todo/<%= project[i].project_id %>">Add Task</a>
+            <td><a href="/edit-project?id=<%= project[i].project_id%>">Edit</a>&nbsp;|&nbsp;<a href="/delete-project/<%= project[i].project_id %>">Delete</a>&nbsp;|&nbsp;<a href="/show-task?id=<%= project[i].project_id %>">Show Task</a>&nbsp;|&nbsp;<a href="/delete-todo/<%= project[i].project_id %>">Add Task</a>
             </td>
         </tr>
         <% } %>

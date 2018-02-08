@@ -8,10 +8,12 @@ module.exports=function(app,controllers){
 		app.get('/logout',controllers.account.logout);
 		app.get('/add-project',controllers.todo.add_project);
 		app.post('/save-project',controllers.todo.save_project);
-		app.get('/edit-project/:id',controllers.todo.edit_project);
+		app.get('/edit-project',controllers.todo.edit_project);
 		app.get('/delete-project/:id',controllers.todo.delete_project);
-		app.post('/save-todo',controllers.todo.save_todo);
-		app.get('/edit-todo/:id',controllers.todo.edit_todo);
-		app.get('/delete-todo/:id',controllers.todo.delete_todo);
+   		app.get('/add-task',controllers.todo.add_task);
+		app.post('/save-task',controllers.todo.save_task);
+		app.get('/edit-task/:id',controllers.todo.edit_task);
+		app.get('/delete-task/:id',controllers.todo.delete_task);
 		app.get('/export-excel',controllers.other.export_excel);
+		app.get('/show-task',controllers.todo.show_task);
 	}
