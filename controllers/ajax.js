@@ -32,7 +32,7 @@ exports.checkEmailAddProject=function(req,res){
         }
         else{
             if(rows.length>0){
-                data={status:'exist',code:'300',name: rows[0].firstname +' '+ rows[0].lastname};
+                data={status:'exist',code:'300',name: rows[0].firstname +' '+ rows[0].lastname, user_id:rows[0].user_id};
             }
             else{
                 data={status:'success',code:'400'};

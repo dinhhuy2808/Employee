@@ -7,63 +7,81 @@
 <div class="mid">
     <div><b><%= data.fname %></b>&nbsp;|&nbsp;<a href="/logout">Logout</a></div>
     <h1>Add Todo List</h1>
-    <form action="save-task" method="post" enctype="multipart/form-data">
-        <table>
-            <tr>
-                <td>
-                    <label>Task Code</label>
-                    <input name="taskcode" id = "taskcode" value = '<%=task_code%>' required disabled>
-                </td>
-
-            </tr>
-            <tr>
-                <td>
-                    <label>Desciption</label>
-                    <textarea type="text" name="description" id="description" required></textarea>
-                </td>
-
-            </tr>
-            <tr>
-                <td>
-                    <label>Assignee</label>
-                    <input type="text" name="assignee" id="assignee" required>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label>Estimate</label>
-                    <input type="text" name="estimate" id="estimate" required>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label>Work Log</label>
-                    <input type="text" name="log" id="log" required disabled>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label>Status</label>
-                    <input type="text" name="status" id="status" required disabled>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label>Approved</label>
-                    <input type="text" name="approved" id="approved" required disabled>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label>Creator</label>
-                    <input type="text" name="creator" id="creator" value = '<%=creator%>' required disabled>
-                </td>
-            </tr>
-        </table>
+    <form action="save-task" method="post">
 
 
-        <input type="submit" value="Add" id = "add"  onclick='buttonAdd()'>
+    <table>
+        <tr>
+            <td>
+                <label>Task Code</label>
+                <input name="taskcode" id="taskcode" value='<%= task_code %>' required disabled>
+            </td>
+
+        </tr>
+        <tr>
+            <td>
+                <label>Desciption</label>
+                <textarea type="text" name="description" id="description" required></textarea>
+            </td>
+
+        </tr>
+        <tr>
+            <td>
+                <label>Assignee</label>
+                <input type="text" name="email" id="email" required>
+            </td>
+            <td>
+                <label>Customer Name</label>
+                <input type="text" name="name" id="name" disabled>
+            </td>
+            <td>
+                <input type="text" name="assignee_id" id="assignee_id" style="display: none">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label>Estimate</label>
+                <input type="text" name="estimate" id="estimate" required>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label>Work Log</label>
+                <input type="text" name="log" id="log" value=' ' required disabled>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label>Status</label>
+                <input type="text" name="status" id="status" value=' ' required disabled>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label>Approved</label>
+                <input type="text" name="approved" id="approved" value=' ' required disabled>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label>Creator</label>
+                <input type="text" name="creator" id="creator" value='<%= creator %>' required disabled>
+            </td>
+            <td>
+                <input type="text" name="creatorid" id="creator_id" value='<%= creator_id %>'style="display: none">
+            </td>
+            <td>
+                <input type="text" name="project_id" id="project_id" style="display: none">
+            </td>
+            <td>
+                <input type="text" name="action" id="action" value = 'save' style="display: none">
+            </td>
+        </tr>
+    </table>
+        <input value="Add" id="add" type="submit" onclick="buttonAdd()">
     </form>
+
+
 </div>
 </body>
 <script type="text/javascript">
@@ -71,25 +89,32 @@
         $('#email').keyup(function () {
             $(".error").remove();
             var obj = $(this);
-            $.ajax({
-                type: "POST",
-                url: "./ajax/checkEmailAddProject",
-                data: "mode=checkEmailAddProject&email=" + obj.val(),
-                success: function (msg) {
-                    //alert(msg);
-                    data = msg;
-                    if (data.status == 'exist') {
-                       /* obj.after("<label class='error'>Email Id Aleady Exist</label>");*/
-                        /*$("#frmId .btn").attr('disabled', 'disabled');*/
-                        document.getElementById('name').value = data.name;
-                        document.getElementById('add').style.display = 'block';
+            if (obj.val().trim() != '') {
+                $.ajax({
+                    type: "POST",
+                    url: "./ajax/checkEmailAddProject",
+                    data: "mode=checkEmailAddProject&email=" + obj.val(),
+                    success: function (msg) {
+                        //alert(msg);
+                        data = msg;
+                        if (data.status == 'exist') {
+                            /* obj.after("<label class='error'>Email Id Aleady Exist</label>");*/
+                            /*$("#frmId .btn").attr('disabled', 'disabled');*/
+                            document.getElementById('name').value = data.name;
+                            document.getElementById('assignee_id').value = data.user_id;
+                            document.getElementById('add').style.display = 'block';
+                        }
+                        else {
+                            document.getElementById('name').value = '';
+                            document.getElementById('add').style.display = 'none';
+                            /* $("#frmId .btn").removeAttr('disabled');*/
+                        }
                     }
-                    else {
-                        document.getElementById('add').style.display = 'none';
-                       /* $("#frmId .btn").removeAttr('disabled');*/
-                    }
-                }
-            });
+                });
+            } else {
+                document.getElementById('add').style.display = 'block';
+            }
+
         });
 
     });
@@ -109,7 +134,7 @@
                         obj.after("<label class='error'>Project Code Is Aleady Exist</label>");
                         document.getElementById('add').style.display = 'none';
                         /*$("#frmId .btn").attr('disabled', 'disabled');*/
-                       /* document.getElementById('name').value = data.name;*/
+                        /* document.getElementById('name').value = data.name;*/
                         /*document.getElementById('add').style.display = 'block';*/
                     }
                     else {
@@ -122,22 +147,50 @@
 
     });
 </script>
-<script>
-    /*function buttonAdd(){
-        var prjNameVal = document.getElementById('projname');
-        var prjcCodeVal = document.getElementById('code');
-        var emailVal = document.getElementById('email');
-        if(prjNameVal.value.trim() == ''){
-            prjNameVal.after("<label class='error'>Project Name Is Mandatory</label>")
-        }
-        if(prjcCodeVal.value.trim() == ''){
-            prjcCodeVal.after("<label class='error'>Project Code Is Mandatory</label>")
-        }
-        if(emailVal.value.trim() == ''){
-            emailVal.after("<label class='error'>Email Is Mandatory</label>")
-        }
+<script language="javascript">
+    if (document.getElementById('email').value.trim() == '') {
+        document.getElementById('add').style.display = 'block';
     }
-*/
+    function  buttonAdd() {
+        var value = getSearchParams('project_id');
+        document.getElementById('project_id').value = value;
+    }
+    function getSearchParams(k){
+        var p={};
+        location.search.replace(/[?&]+([^=&]+)=([^&]*)/gi,function(s,k,v){p[k]=v})
+        return k?p[k]:p;
+    }
+   /* function DoPost() {
+
+        var varTaskCode = document.getElementById('taskcode').value;
+        var varDescription = document.getElementById('description').value;
+        var varAssignee = document.getElementById('userid').value;
+        var varEstimate = document.getElementById('estimate').value;
+        var varLog = document.getElementById('log').value;
+        var varStatus = document.getElementById('status').value;
+        var varApproved = document.getElementById('approved').value;
+        var varCreator = document.getElementById('creator').value;
+
+        if (varDescription.trim() == '') {
+            $(".error").remove();
+            $(document.getElementById('description')).after("<label class='error'>This Is Mandatory Field</label>")
+        } else {
+            $.post("save-task", {
+                taskcode: varTaskCode,
+                description: varDescription,
+                assignee_id: varAssignee,
+                estimate: varEstimate,
+                log: varLog,
+                status: varStatus,
+                approved: varApproved,
+                creator: varCreator,
+                creator_id: document.getElementById('creatorid').value,
+                project_id: getSearchParams('project_id'),
+                action : 'save'
+            });  //Your values here..
+        }
+
+    }*/
 
 </script>
 <%- include layout/footer.ejs %>

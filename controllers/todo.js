@@ -169,7 +169,8 @@ module.exports.add_task = function(req, res){
         data={title:'Add task | '+req.session.firstname,
 				fname:req.session.firstname,
 				task_code:req.query.code+'-'+(parseInt(req.query.tasksize) + 1),
-				creator : req.session.firstname + ' ' + req.session.lastname
+				creator : req.session.firstname + ' ' + req.session.lastname,
+                creator_id : req.session.user_id
 		};
         res.render('add_task',data);
     }
@@ -181,50 +182,46 @@ module.exports.add_task = function(req, res){
 //Save Task
 module.exports.save_task=function(req,res){
     var input=JSON.parse(JSON.stringify(req.body));
-    var data1={
-        email:input.email
-    };
-    req.models.user.find(data1, function(err, rows,next) {
-        if(err){
-            console.log(err);
-        }
-        if(rows.length>0){
-            console.log(rows);
-            var data={
-                project_name:input.projname,
-                customer_id:rows[0].user_id,
-                code:input.code
-            };
-            if(typeof input.id=="undefined"){
-                req.models.project.create(data,function(err,rows){
-                    if(err){
-                        console.log(err);
-                    }
-                    else{
-                    }
+    var data={
+        project_id : input.project_id,
+        approved : input.approved,
+        status_id : 0,
+        assignee_id: input.assignee_id,
+        estimate : input.estimate,
+        log_work: input.log,
+        description:input.description,
+        reporter_id:input.creator_id,
+        task_code:input.taskcode
 
-                });
+    };
+    if(input.action=="save"){
+        req.models.task.create(data,function(err,rows){
+            if(err){
+                console.log(err);
             }
             else{
-                req.models.project.get(input.id,function(err,rows){
-                    if(err){
-                        console.log(err);
-                    }
-                    else{
-                        rows.project_name=input.projname;
-                        rows.code=input.code;
-                        rows.customer_id=input.email;
-                        rows.save(data,function(err){
-                            console.log('saved');
-                        });
-                    }
-                    /* res.redirect('/');*/
+                console.log(err)
+            }
+
+        });
+    }
+    else{
+        req.models.task.get(input.id,function(err,rows){
+            if(err){
+                console.log(err);
+            }
+            else{
+                rows.project_name=input.projname;
+                rows.code=input.code;
+                rows.customer_id=input.email;
+                rows.save(data,function(err){
+                    console.log('saved');
                 });
             }
-        }
-
-    });
-    res.redirect('/');
+            /* res.redirect('/');*/
+        });
+    }
+    res.redirect('/show-task?id='+input.project_id);
 };
 //edit task
 module.exports.edit_task=function(req,res){

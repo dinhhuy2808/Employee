@@ -26,9 +26,9 @@
         <% for(i = 0;i < tasks.length;i++){ %>
         <tr>
             <td><%= i+1 %></td>
-            <td><%= tasks[i].create_time()%></td>
+            <td><%= tasks[i].create_time%></td>
             <td><%= tasks[i].task_code %></td>
-            <td><%= tasks[i].description() %></td>
+            <td><%= tasks[i].description %></td>
             <td><%= tasks[i].assignee_id %></td>
             <td><%= tasks[i].estimate %></td>
             <td><%= tasks[i].log_work %></td>
