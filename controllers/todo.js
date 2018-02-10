@@ -182,17 +182,24 @@ module.exports.add_task = function(req, res){
 //Save Task
 module.exports.save_task=function(req,res){
     var input=JSON.parse(JSON.stringify(req.body));
+    var date = new Date();
+    var month = date.getMonth() + 1;
+    month = (month < 10 ? "0" : "") + month;
+
+    var day  = date.getDate();
+    day = (day < 10 ? "0" : "") + day;
+    var year = date.getUTCFullYear();
     var data={
-        project_id : input.project_id,
+        project_id : parseInt(input.project_id),
         approved : input.approved,
         status_id : 0,
-        assignee_id: input.assignee_id,
-        estimate : input.estimate,
+        assignee_id: parseInt(input.assignee_id),
+        estimate : parseInt(input.estimate),
         log_work: input.log,
         description:input.description,
-        reporter_id:input.creator_id,
-        task_code:input.taskcode
-
+        reporter_id:parseInt(input.creator_id),
+        task_code:input.taskcode,
+        create_time:parseInt(year+''+month+''+day)
     };
     if(input.action=="save"){
         req.models.task.create(data,function(err,rows){

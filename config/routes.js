@@ -4,6 +4,7 @@ module.exports=function(app,controllers){
 		app.post('/ajax/checkEmail',controllers.ajax.checkEmail);
     	app.post('/ajax/checkEmailAddProject',controllers.ajax.checkEmailAddProject);
     	app.post('/ajax/checkProjectCode',controllers.ajax.checkProjectCode);
+    	app.post('/ajax/getName',controllers.ajax.getName);
 		app.post('/login',controllers.account.login);
 		app.get('/logout',controllers.account.logout);
 		app.get('/add-project',controllers.todo.add_project);

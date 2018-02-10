@@ -7,14 +7,14 @@
 <div class="mid">
     <div><b><%= data.fname %></b>&nbsp;|&nbsp;<a href="/logout">Logout</a></div>
     <h1>Add Todo List</h1>
-    <form action="save-task" method="post">
+    <form action="save-task" novalidate  method="post">
 
 
     <table>
         <tr>
             <td>
                 <label>Task Code</label>
-                <input name="taskcode" id="taskcode" value='<%= task_code %>' required disabled>
+                <input name="taskcode" id="taskcode" value='<%= task_code %>' required >
             </td>
 
         </tr>
@@ -35,40 +35,40 @@
                 <input type="text" name="name" id="name" disabled>
             </td>
             <td>
-                <input type="text" name="assignee_id" id="assignee_id" style="display: none">
+                <input type="text" name="assignee_id" id="assignee_id" value = '0' style="display: none">
             </td>
         </tr>
         <tr>
             <td>
                 <label>Estimate</label>
-                <input type="text" name="estimate" id="estimate" required>
+                <input type="text" name="estimate" id="estimate" value = '0' required>
             </td>
         </tr>
         <tr>
             <td>
                 <label>Work Log</label>
-                <input type="text" name="log" id="log" value=' ' required disabled>
+                <input type="text" name="log" id="log" value='' required >
             </td>
         </tr>
         <tr>
             <td>
                 <label>Status</label>
-                <input type="text" name="status" id="status" value=' ' required disabled>
+                <input type="text" name="status" id="status" value=' ' required >
             </td>
         </tr>
         <tr>
             <td>
                 <label>Approved</label>
-                <input type="text" name="approved" id="approved" value=' ' required disabled>
+                <input type="text" name="approved" id="approved" value=' ' required >
             </td>
         </tr>
         <tr>
             <td>
                 <label>Creator</label>
-                <input type="text" name="creator" id="creator" value='<%= creator %>' required disabled>
+                <input type="text" name="creator" id="creator" value='<%= creator %>' required>
             </td>
             <td>
-                <input type="text" name="creatorid" id="creator_id" value='<%= creator_id %>'style="display: none">
+                <input type="text" name="creator_id" id="creator_id" value='<%= creator_id %>'style="display: none">
             </td>
             <td>
                 <input type="text" name="project_id" id="project_id" style="display: none">

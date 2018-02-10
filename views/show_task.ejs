@@ -9,7 +9,7 @@
     <input type = text value = '<%=tasks.length%>' id = 'tasksize' name = 'tasksize' style = 'display: none'>
     <h1>Project : <%=project[0].project_name%></h1>
     <a href="add-task?project_id=<%=project[0].project_id%>&tasksize=<%=tasks.length%>&code=<%=project[0].code%>">Add Project</a>&nbsp;|&nbsp;<a href="export-excel">Export Excel</a>
-    <table width="100%" cellpadding="15">
+    <table width="100%" cellpadding="15" id = 'tbl'>
         <tr>
             <td>Sl.</td>
             <td>Create Date</td>
@@ -29,16 +29,60 @@
             <td><%= tasks[i].create_time%></td>
             <td><%= tasks[i].task_code %></td>
             <td><%= tasks[i].description %></td>
-            <td><%= tasks[i].assignee_id %></td>
+            <td id="assign<%=i+1%>"><%= tasks[i].assignee_id %></td>
             <td><%= tasks[i].estimate %></td>
             <td><%= tasks[i].log_work %></td>
             <td><%= tasks[i].status_id %></td>
             <td><%= tasks[i].approved %></td>
-            <td><%= tasks[i].reporter_id %></td>
+            <td id="report<%=i+1%>"><%= tasks[i].reporter_id %></td>
             <td><a href="/edit-project?id=<%= tasks[i].task_id%>">Edit</a>&nbsp;|&nbsp;<a href="/delete-project/<%= tasks[i].task_id %>">Delete</a>&nbsp;|&nbsp;<a href="/show-task?id= <%= tasks[i].task_id %> ">Show Task</a>&nbsp;|&nbsp;<a href="/delete-todo/<%= tasks[i].task_id %>">Add Task</a>
             </td>
         </tr>
         <% } %>
     </table>
 </div>
+<script>
+    var t = document.getElementById("tbl");
+    for (var r = 1; r < t.rows.length; r++) {
+        var date = t.rows[r].cells[1].innerHTML;
+        var newDate = date.substring(6,8)+'/'+date.substring(4,6)+'/'+date.substring(0,4);
+        t.rows[r].cells[1].innerHTML = newDate;
+
+
+        $.ajax({
+            type: "POST",
+            url: "./ajax/getName",
+            data: "mode=getName&id=" + t.rows[r].cells[4].innerHTML,
+            success: function (msg) {
+                //alert(msg);
+                data = msg;
+                if (data.status == 'exist') {
+                    /* obj.after("<label class='error'>Email Id Aleady Exist</label>");*/
+                    /*$("#frmId .btn").attr('disabled', 'disabled');*/
+                    document.getElementById('assign'+r).innerHTML = data.name;
+                }
+
+            }
+        });
+
+        $.ajax({
+            type: "POST",
+            url: "./ajax/getName",
+            data: "mode=getName&id=" + t.rows[r].cells[9].innerHTML,
+            success: function (msg) {
+                //alert(msg);
+                data = msg;
+                if (data.status == 'exist') {
+                    /* obj.after("<label class='error'>Email Id Aleady Exist</label>");*/
+                    /*$("#frmId .btn").attr('disabled', 'disabled');*/
+                    document.getElementById('report'+r).innerHTML = data.name;
+                }
+
+            }
+        });
+    }
+    function converDate(i){
+        return i.substring(6,7)+'/'+i.substring(4,5)+i.substring(0,3);
+    }
+</script>
 <%- include layout/footer.ejs %>
