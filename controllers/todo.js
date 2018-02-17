@@ -129,12 +129,14 @@ module.exports.save_todo=function(req,res){
 
 //Show Task
 module.exports.show_task=function(req,res){
-    req.models.task.find({project_id:req.query.id},function(err, rows,next){
+    var sql = 'select * from task t join user u on t.assignee_id = u.user_id;';
+    var con = req.db.driver.db;
+    con.query(sql, function (err, rows) {
         if(err){
             console.log(err);
         }
         else{
-        	var projectName ;
+            var projectName ;
             req.models.project.find({project_id:req.query.id},function(err, row1,next){
                 if(err){
                     console.log(err);
@@ -148,8 +150,9 @@ module.exports.show_task=function(req,res){
 
 
         }
-
     });
+
+
 };
 
 //add project
@@ -166,13 +169,22 @@ module.exports.add_project = function(req, res){
 //add task
 module.exports.add_task = function(req, res){
     if(typeof req.session.user_id!='undefined'){
-        data={title:'Add task | '+req.session.firstname,
-				fname:req.session.firstname,
-				task_code:req.query.code+'-'+(parseInt(req.query.tasksize) + 1),
-				creator : req.session.firstname + ' ' + req.session.lastname,
-                creator_id : req.session.user_id
-		};
-        res.render('add_task',data);
+
+        req.models.task.find({project_id:req.query.project_id},function(err, row1){
+            if(err){
+                console.log(err);
+            }
+            else{
+                data={title:'Add task | '+req.session.firstname,
+                    fname:req.session.firstname,
+                    task_code:req.query.code+'-'+(parseInt(row1.length) + 1),
+                    creator : req.session.firstname + ' ' + req.session.lastname,
+                    creator_id : req.session.user_id
+                };
+                res.render('add_task',data);
+            }
+        });
+
     }
     else{
         res.redirect('/');
@@ -244,12 +256,12 @@ module.exports.edit_task=function(req,res){
 };
 //delete task
 module.exports.delete_task=function(req,res){
-    req.models.todo.find({id:req.params.id}).remove(function(err){
+    req.models.task.find({task_id:req.params.id}).remove(function(err){
         if(err){
             console.log(err);
         }
         else{
         }
-        res.redirect('/');
+        res.redirect('/show-task?id='+req.params.project);
     });
 };
