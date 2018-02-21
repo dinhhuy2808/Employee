@@ -14,40 +14,42 @@
         <tr>
             <td>
                 <label>Task Code</label>
-                <input name="taskcode" id="taskcode" value='<%= task_code %>' required >
+                <input name="taskcode" id="taskcode" value='<%= tasks[0].task_code %>' required >
             </td>
-
+            <td>
+                <input name="task_id" id="task_id" value='<%= tasks[0].task_id %>' required style="display: none" >
+            </td>
         </tr>
         <tr>
             <td>
                 <label>Desciption</label>
-                <textarea type="text" name="description" id="description" required></textarea>
+                <textarea type="text" name="description" id="description" value='<%= tasks[0].description %>' required></textarea>
             </td>
 
         </tr>
         <tr>
             <td>
                 <label>Assignee</label>
-                <input type="text" name="email" id="email" required>
+                <input type="text" name="email" id="email" value='<%= tasks[0].assignee_email %>' required>
             </td>
             <td>
                 <label>Customer Name</label>
-                <input type="text" name="name" id="name" disabled>
+                <input type="text" name="name" id="name" value='<%= tasks[0].assignee_firstname  + ' ' + tasks[0].assignee_lastname%>' disabled>
             </td>
             <td>
-                <input type="text" name="assignee_id" id="assignee_id" value = '0' style="display: none">
+                <input type="text" name="assignee_id" id="assignee_id" value='<%= tasks[0].assignee_id %>' style="display: none">
             </td>
         </tr>
         <tr>
             <td>
                 <label>Estimate</label>
-                <input type="text" name="estimate" id="estimate" value = '0' required>
+                <input type="text" name="estimate" id="estimate" value='<%= tasks[0].estimate %>' required>
             </td>
         </tr>
         <tr>
             <td>
                 <label>Work Log</label>
-                <input type="text" name="log" id="log" value='' required >
+                <input type="text" name="log" id="log" value='<%= tasks[0].log_work %>' required >
             </td>
         </tr>
         <tr>
@@ -55,44 +57,42 @@
                 <label>Status</label>
                 <select name="status" id="status">
                     <% for (var i = 0;i<data.status.length;i++){%>
-                        <%if(i == 0){%>
-                             <option value="<%=data.status[i].status_id%>" selected><%=data.status[i].description%></option>
-                        <%} else {%>
-                            <option value="<%=data.status[i].status_id%>"><%=data.status[i].description%></option>
-                        <%}%>
+                    <%if(data.status[i].status_id == tasks[0].status_id){%>
+                    <option value="<%=data.status[i].status_id%>" selected><%=data.status[i].description%></option>
+                    <%} else {%>
+                    <option value="<%=data.status[i].status_id%>"><%=data.status[i].description%></option>
+                    <%}%>
                     <%}%>
 
                 </select>
             </td>
-
         </tr>
         <tr>
             <td>
                 <label>Approved</label>
-
                 <select name="approved" id="approved">
                     <option value="N" selected>No</option>
                     <option value="Y">Yes</option>
-                 </select>
+                </select>
             </td>
         </tr>
         <tr>
             <td>
                 <label>Creator</label>
-                <input type="text" name="creator" id="creator" value='<%= creator %>' required>
+                <input type="text" name="creator" id="creator" value='<%= tasks[0].reporter_firstname + ' '+tasks[0].reporter_lastname %>' required>
             </td>
             <td>
-                <input type="text" name="creator_id" id="creator_id" value='<%= creator_id %>'style="display: none">
+                <input type="text" name="creator_id" id="creator_id" value='<%= tasks[0].reporter_id %>'style="display: none">
             </td>
             <td>
-                <input type="text" name="project_id" id="project_id" style="display: none">
+                <input type="text" name="project_id" id="project_id" value='<%= tasks[0].project_id %>'style="display: none">
             </td>
             <td>
-                <input type="text" name="action" id="action" value = 'save' style="display: none">
+                <input type="text" name="action" id="action" value = 'edit' style="display: none">
             </td>
         </tr>
     </table>
-        <input value="Add" id="add" type="submit" onclick="buttonAdd()">
+        <input value="Add" id="add" type="submit">
     </form>
 
 
@@ -162,7 +162,7 @@
     });
 </script>
 <script language="javascript">
-
+    $("#approved").val('<%=tasks[0].approved%>');
     if (document.getElementById('email').value.trim() == '') {
         document.getElementById('add').style.display = 'block';
     }
@@ -175,8 +175,6 @@
         location.search.replace(/[?&]+([^=&]+)=([^&]*)/gi,function(s,k,v){p[k]=v})
         return k?p[k]:p;
     }
-
-
    /* function DoPost() {
 
         var varTaskCode = document.getElementById('taskcode').value;

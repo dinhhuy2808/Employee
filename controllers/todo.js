@@ -129,7 +129,25 @@ module.exports.save_todo=function(req,res){
 
 //Show Task
 module.exports.show_task=function(req,res){
-    var sql = 'select * from task t join user u on t.assignee_id = u.user_id;';
+    var sql = 'SELECT `task`.`task_id`,\n' +
+        '    `task`.`project_id`,\n' +
+        '    `task`.`create_time`,\n' +
+        '    `task`.`approved`,\n' +
+        '    `task`.`status_id`,\n' +
+        '    `task`.`assignee_id`,\n' +
+        '    `task`.`estimate`,\n' +
+        '    `task`.`log_work`,\n' +
+        '    `task`.`description`,\n' +
+        '    `task`.`reporter_id`,\n' +
+        '    `task`.`task_code`,\n' +
+        '    (select description from status where status_id = `task`.`status_id`) as status,\n' +
+        '    (select firstname from user where user_id = `task`.`reporter_id`) as reporter_firstname,\n' +
+        '    (select lastname from user where user_id = `task`.`reporter_id`) as reporter_lastname,\n' +
+        '    (select firstname from user where user_id = `task`.`assignee_id`) as assignee_firstname,\n' +
+        '    (select lastname from user where user_id = `task`.`assignee_id`) as assignee_lastname,\n' +
+        '    (select email from user where user_id = `task`.`assignee_id`) as assignee_email,\n' +
+        '    (select email from user where user_id = `task`.`reporter_id`) as reporter_email\n' +
+        'FROM `employee`.`task` where `project_id` = '+req.query.id+';';
     var con = req.db.driver.db;
     con.query(sql, function (err, rows) {
         if(err){
@@ -175,13 +193,23 @@ module.exports.add_task = function(req, res){
                 console.log(err);
             }
             else{
-                data={title:'Add task | '+req.session.firstname,
-                    fname:req.session.firstname,
-                    task_code:req.query.code+'-'+(parseInt(row1.length) + 1),
-                    creator : req.session.firstname + ' ' + req.session.lastname,
-                    creator_id : req.session.user_id
-                };
-                res.render('add_task',data);
+                var sql = 'select * from status;';
+                var con = req.db.driver.db;
+                con.query(sql, function (err, rows) {
+                    if(err){
+                        console.log(err);
+                    }
+                    data={title:'Add task | '+req.session.firstname,
+                        fname:req.session.firstname,
+                        task_code:req.query.code+'-'+(parseInt(row1.length) + 1),
+                        creator : req.session.firstname + ' ' + req.session.lastname,
+                        creator_id : req.session.user_id,
+                        status : rows
+                    };
+                    res.render('add_task',data);
+
+                });
+
             }
         });
 
@@ -204,7 +232,7 @@ module.exports.save_task=function(req,res){
     var data={
         project_id : parseInt(input.project_id),
         approved : input.approved,
-        status_id : 0,
+        status_id : parseInt(input.status),
         assignee_id: parseInt(input.assignee_id),
         estimate : parseInt(input.estimate),
         log_work: input.log,
@@ -225,32 +253,67 @@ module.exports.save_task=function(req,res){
         });
     }
     else{
-        req.models.task.get(input.id,function(err,rows){
+        var sql = 'UPDATE `employee`.`task` ' +
+            'SET ' +
+            '`project_id` = '+input.project_id+', ' +
+            '`approved` = \''+input.approved+'\', ' +
+            '`status_id` = '+input.status+', ' +
+            '`assignee_id` = '+input.assignee_id+', ' +
+            '`estimate` = '+input.estimate+', ' +
+            '`log_work` = \''+input.log+'\', ' +
+            '`description` = \''+input.description+'\' ' +
+            ' WHERE `task`.`task_id` = '+input.task_id;
+        var con = req.db.driver.db;
+        con.query(sql, function (err, rows) {
             if(err){
                 console.log(err);
             }
-            else{
-                rows.project_name=input.projname;
-                rows.code=input.code;
-                rows.customer_id=input.email;
-                rows.save(data,function(err){
-                    console.log('saved');
-                });
-            }
-            /* res.redirect('/');*/
+
         });
+
     }
     res.redirect('/show-task?id='+input.project_id);
 };
 //edit task
 module.exports.edit_task=function(req,res){
-    req.models.todo.find({id:req.params.id},function(err,rows){
+    var sql = 'SELECT `task`.`task_id`,\n' +
+        '    `task`.`project_id`,\n' +
+        '    `task`.`create_time`,\n' +
+        '    `task`.`approved`,\n' +
+        '    `task`.`status_id`,\n' +
+        '    `task`.`assignee_id`,\n' +
+        '    `task`.`estimate`,\n' +
+        '    `task`.`log_work`,\n' +
+        '    `task`.`description`,\n' +
+        '    `task`.`reporter_id`,\n' +
+        '    `task`.`task_code`,\n' +
+        '    (select description from status where status_id = `task`.`status_id`) as status,\n' +
+        '    (select firstname from user where user_id = `task`.`reporter_id`) as reporter_firstname,\n' +
+        '    (select lastname from user where user_id = `task`.`reporter_id`) as reporter_lastname,\n' +
+        '    (select firstname from user where user_id = `task`.`assignee_id`) as assignee_firstname,\n' +
+        '    (select lastname from user where user_id = `task`.`assignee_id`) as assignee_lastname,\n' +
+        '    (select email from user where user_id = `task`.`assignee_id`) as assignee_email,\n' +
+        '    (select email from user where user_id = `task`.`reporter_id`) as reporter_email\n' +
+        'FROM `employee`.`task` where `task`.`task_id` ='+ req.query.id + ';';
+    var con = req.db.driver.db;
+    con.query(sql, function (err, rows) {
         if(err){
             console.log(err);
         }
         else{
-            data={title:'Edit todo | '+req.session.fname,fname:req.session.fname,todo:rows};
-            res.render('edit_todo',data);
+            var sql2 = 'select * from status';
+            con.query(sql2, function (err, row2s) {
+                if(err){
+                    console.log(err);
+                }
+                else{
+                    data={title:'Tasks | '+req.session.firstname,fname:req.session.firstname,tasks:rows,status:row2s};
+                    res.render('edit_task',data);
+
+                }
+            });
+
+
         }
     });
 };

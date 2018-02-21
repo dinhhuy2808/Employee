@@ -13,7 +13,7 @@ module.exports=function(app,controllers){
 		app.get('/delete-project/:id',controllers.todo.delete_project);
    		app.get('/add-task',controllers.todo.add_task);
 		app.post('/save-task',controllers.todo.save_task);
-		app.get('/edit-task/:id',controllers.todo.edit_task);
+		app.get('/edit-task',controllers.todo.edit_task);
 		app.get('/delete-task/:id&:project',controllers.todo.delete_task);
 		app.get('/export-excel',controllers.other.export_excel);
 		app.get('/show-task',controllers.todo.show_task);

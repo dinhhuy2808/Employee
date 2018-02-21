@@ -44,6 +44,7 @@ module.exports.login=function(req,res){
 			req.session.firstname=rows[0].firstname;
             req.session.lastname=rows[0].lastname;
 			req.session.user_id=rows[0].user_id;
+            req.session.type=rows[0].type_id;
 			console.log(rows);
 		}
 		res.redirect('/');

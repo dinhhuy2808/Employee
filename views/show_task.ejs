@@ -8,8 +8,9 @@
     <input type = text value = '<%=project[0].code%>' id = 'code' name = 'code' style = 'display: none'>
     <input type = text value = '<%=tasks.length%>' id = 'tasksize' name = 'tasksize' style = 'display: none'>
     <input type = text value = '<%=project[0].project_id%>' id = 'proj_id' name = 'proj_id' style = 'display: none'>
+    &nbsp;<a href="/">Show Projects</a>
     <h1>Project : <%=project[0].project_name%></h1>
-    <a href="add-task?project_id=<%=project[0].project_id%>&tasksize=<%=tasks.length%>&code=<%=project[0].code%>">Add Project</a>&nbsp;|&nbsp;<a href="export-excel">Export Excel</a>
+    <a href="add-task?project_id=<%=project[0].project_id%>&tasksize=<%=tasks.length%>&code=<%=project[0].code%>">Add Task</a>&nbsp;|&nbsp;<a href="export-excel">Export Excel</a>
     <table width="100%" cellpadding="15" id = 'tbl'>
         <tr>
             <td>Sl.</td>
@@ -30,12 +31,12 @@
             <td><%= tasks[i].create_time%></td>
             <td><%= tasks[i].task_code %></td>
             <td><%= tasks[i].description %></td>
-            <td id="assign<%=i+1%>"><%= tasks[i].firstname + ' ' + tasks[i].lastname+ ' (' + tasks[i].email + ')'%></td>
+            <td id="assign<%=i+1%>"><%= tasks[i].assignee_firstname + ' ' + tasks[i].assignee_lastname+ ' (' + tasks[i].assignee_email + ')'%></td>
             <td><%= tasks[i].estimate %></td>
             <td><%= tasks[i].log_work %></td>
-            <td><%= tasks[i].status_id %></td>
+            <td><%= tasks[i].status %></td>
             <td><%= tasks[i].approved %></td>
-            <td id="report<%=i+1%>"><%= tasks[i].reporter_id %></td>
+            <td id="report<%=i+1%>"><%= tasks[i].reporter_firstname + ' ' + tasks[i].reporter_lastname+ ' (' + tasks[i].reporter_email + ')'%></td>
             <td><a href="/edit-task?id=<%= tasks[i].task_id%>">Edit</a>&nbsp;|&nbsp;<a href="/delete-task/<%= tasks[i].task_id %>&<%= tasks[i].project_id%>">Delete</a>&nbsp;<!--|&nbsp;<a href="/show-task?id= <%= tasks[i].task_id %> ">Show Task</a>&nbsp;|&nbsp;<a href="/delete-todo/<%= tasks[i].task_id %>">Add Task</a>-->
             </td>
         </tr>
