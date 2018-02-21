@@ -147,7 +147,22 @@ module.exports.show_task=function(req,res){
         '    (select lastname from user where user_id = `task`.`assignee_id`) as assignee_lastname,\n' +
         '    (select email from user where user_id = `task`.`assignee_id`) as assignee_email,\n' +
         '    (select email from user where user_id = `task`.`reporter_id`) as reporter_email\n' +
-        'FROM `employee`.`task` where `project_id` = '+req.query.id+';';
+        'FROM `employee`.`task` where `project_id` = '+req.query.id;
+
+
+    if(req.query.assigneeflt != '' && req.query.assigneeflt != undefined){
+        sql += ' and `assignee_id` = (select user_id from user where email = \''+req.query.assigneeflt+'\') ';
+    }
+    if(req.query.reporterflt != '' && req.query.reporterflt != undefined){
+        sql += ' and `reporter_id` = (select user_id from user where email = \''+req.query.reporterflt+'\') ';
+    }
+    if(req.query.statusflt != '' && req.query.statusflt != undefined){
+        sql += ' and `status_id` = '+req.query.statusflt+' ';
+    }
+    if(req.query.approvedflt != '' && req.query.approvedflt != undefined){
+        sql += ' and `approved` = \''+req.query.approvedflt+'\' ';
+    }
+
     var con = req.db.driver.db;
     con.query(sql, function (err, rows) {
         if(err){

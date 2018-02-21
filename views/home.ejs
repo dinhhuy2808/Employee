@@ -481,14 +481,21 @@
 
         <h3 class="booking-title">521 hotels in New York on Mar 22 - Apr 17 for 1 adult</h3>
         <form action = '/' method = 'get'>
+            <label>Filtered By </label>
             <div class="row">
                 <div class="col-md-4">
-                    <div>
-                        <label>Filtered By Customer: </label>
-                        <input class="typeahead form-control" name = 'emailflt' id = 'emailflt' value=""  type="text" />
+                    <div class="form-group form-group-icon-left">
+                        <label>Customer Email:</label>
+                        <input class="typeahead form-control" name = 'email' id = 'email' value=""  type="text" />
+                    </div>
+
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group form-group-icon-left">
+                        <label>Customer Name: </label>
+                        <input class="typeahead form-control" name = 'name' id = 'name' value=""  type="text" />
                     </div>
                 </div>
-
 
             </div>
             <br/>
@@ -538,10 +545,10 @@
                                             </li>
                                         </ul><span class="booking-item-rating-number"><b >3.9</b> of 5</span><small>(1199 reviews)</small>
                                     </div>-->
-                                    <h5 class="booking-item-title"><%= project[i].project_name %></h5>
+                                    <h5 class="booking-item-title">Project :  <%= project[i].project_name %></h5>
                                     <p class="booking-item-title" style="display:none;"><%= project[i].customer_id %></p>
-                                    <p class="booking-item-title"><%= project[i].firstname +' '+ project[i].lastname + ' ('+ project[i].email +')'%></p>
-                                    <p class="booking-item-title"><%= project[i].code %></p>
+                                    <p class="booking-item-title">Customer : <%= project[i].firstname +' '+ project[i].lastname + ' ('+ project[i].email +')'%></p>
+                                    <p class="booking-item-title">Project Code: <%= project[i].code %></p>
                                 </div>
                                <div class="col-md-3">
                                    <table>
