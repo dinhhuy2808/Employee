@@ -176,7 +176,7 @@ module.exports.show_task=function(req,res){
                 }
                 else{
                     projectName = row1[0].project_name;
-                    data={title:'Tasks | '+req.session.firstname,fname:req.session.firstname,tasks:rows,project:row1};
+                    data={title:'Tasks | '+req.session.firstname,fname:req.session.firstname,tasks:rows,project:row1,type:req.session.type};
                     res.render('show_task',data);
                 }
             });
@@ -270,9 +270,11 @@ module.exports.save_task=function(req,res){
     else{
         var sql = 'UPDATE `employee`.`task` ' +
             'SET ' +
-            '`project_id` = '+input.project_id+', ' +
-            '`approved` = \''+input.approved+'\', ' +
-            '`status_id` = '+input.status+', ' +
+            '`project_id` = '+input.project_id+', ';
+            if(req.session.type == 1){
+                sql+='`approved` = \''+input.approved+'\', ';
+            }
+            sql += '`status_id` = '+input.status+', ' +
             '`assignee_id` = '+input.assignee_id+', ' +
             '`estimate` = '+input.estimate+', ' +
             '`log_work` = \''+input.log+'\', ' +
@@ -322,7 +324,7 @@ module.exports.edit_task=function(req,res){
                     console.log(err);
                 }
                 else{
-                    data={title:'Tasks | '+req.session.firstname,fname:req.session.firstname,tasks:rows,status:row2s};
+                    data={title:'Tasks | '+req.session.firstname,fname:req.session.firstname,lname:req.session.lastname,tasks:rows,status:row2s,type:req.session.type,userid:req.session.user_id};
                     res.render('edit_task',data);
 
                 }

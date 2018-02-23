@@ -505,18 +505,21 @@
         <div class="row">
 
             <div class="col-md-12">
+                <%if (data.type == 1){%>
+                    <table>
+                        <tr>
+                            <td>
+                                <a class="btn btn-primary" href="add-project">Add Project</a>
+                            </td>
+                            <td>
+                                <a class="btn btn-primary" href="export-excel">Export Excel</a>
+                            </td>
+                        </tr>
 
-                <table>
-                    <tr>
-                        <td>
-                            <a class="btn btn-primary" href="add-project">Add Project</a>
-                        </td>
-                        <td>
-                            <a class="btn btn-primary" href="export-excel">Export Excel</a>
-                        </td>
-                    </tr>
+                    </table>
 
-                </table>
+                <%}%>
+
 
                 <ul class="booking-list">
 
@@ -700,6 +703,7 @@
     <script src="js/countdown.js"></script>
     <script src="js/gridrotator.js"></script>
     <script src="js/custom.js"></script>
+
 </div>
 </body>
 

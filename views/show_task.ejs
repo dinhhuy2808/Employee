@@ -557,6 +557,7 @@
 
         </form>
         <br/>
+        <%if (data.type == 1){%>
         <table>
             <tr>
                 <td>
@@ -568,53 +569,58 @@
             </tr>
 
         </table>
+        <%}%>
         <br/>
         <div class="row">
 
-            <div class="col-md-9">
+            <div class="col-md-12">
 
                 <ul class="booking-list">
                     </br>
                     <input type = text value = '<%=project[0].code%>' id = 'code' name = 'code' style = 'display: none'>
                     <input type = text value = '<%=tasks.length%>' id = 'tasksize' name = 'tasksize' style = 'display: none'>
                     <input type = text value = '<%=project[0].project_id%>' id = 'proj_id' name = 'proj_id' style = 'display: none'>
+                    <div class="row">
+                        <div class="col-md-2">
+                            <h4 class="booking-item-title">Task Code</h4>
+                        </div>
+                        <div class="col-md-2">
+                            <h4 class="booking-item-title">Assignee</h4>
+                        </div>
+                        <div class="col-md-2">
+                            <h4 class="booking-item-title">Reporter</h4>
+                        </div>
+                        <div class="col-md-1">
+                            <h4 class="booking-item-title">Status</h4>
+                        </div>
+                        <div class="col-md-2">
+                            <h4 class="booking-item-title">Approved</h4>
+                        </div>
+                        <div class="col-md-2">
+                            <h4 class="booking-item-title">Created Date</h4>
+                        </div>
+                    </div>
                     <% for(i = 0;i < tasks.length;i++){ %>
 
 
                     <li>
                         <a class="booking-item" href="/edit-task?id=<%= tasks[i].task_id%>">
                             <div class="row">
-                                <div class="row">
-                                    <div class="col-md-2">
-                                        <h5 class="booking-item-title">Task Code</h5>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <h5 class="booking-item-title">Assignee</h5>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <h5 class="booking-item-title">Reporter</h5>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <h5 class="booking-item-title">Status</h5>
-                                    </div>
-                                    <div class="col-md-1">
-                                        <h5 class="booking-item-title">Approved</h5>
-                                    </div>
-                                </div>
+
                                 <div class="row">
                                     <div class="col-md-2">
                                         <h5 class="booking-item-title"><%= tasks[i].task_code %></h5>
                                     </div>
-                                    <div class="col-md-3">
+                                    <div class="col-md-2">
                                         <p class="booking-item-description"> <%= tasks[i].assignee_firstname + ' ' + tasks[i].assignee_lastname+ ' (' + tasks[i].assignee_email + ')'%></p>
                                     </div>
-                                    <div class="col-md-3">
+                                    <div class="col-md-2">
                                         <p class="booking-item-description"> <%= tasks[i].reporter_firstname + ' ' + tasks[i].reporter_lastname+ ' (' + tasks[i].reporter_email + ')'%></p>
                                     </div>
-                                    <div class="col-md-2">
+                                    <div class="col-md-1">
                                         <p class="booking-item-description"> <%= tasks[i].status %></p>
                                     </div>
-                                    <div class="col-md-1">
+                                    <div class="col-md-2">
                                         <% if(tasks[i].approved == 'Y') {%>
                                         <p class="booking-item-description">Yes</p>
                                         <%} else  {%>
@@ -622,10 +628,13 @@
                                         <%}%>
 
                                     </div>
+                                    <div class="col-md-2">
+                                        <p class="booking-item-description" id = 'date<%=i%>' ></p>
+                                    </div>
 
                                 </div>
                                 <div class="col-md-3">
-                                    <table>
+                                   <!-- <table>
                                         <tr>
                                             <td>
                                                 <a class="btn btn-primary" href="/edit-task?id=<%= tasks[i].task_id%>">Edit</a>
@@ -633,7 +642,7 @@
 
                                         </tr>
 
-                                    </table>
+                                    </table>-->
                                 </div>
                             </div>
                         </a>
@@ -768,6 +777,16 @@
     <script src="js/countdown.js"></script>
     <script src="js/gridrotator.js"></script>
     <script src="js/custom.js"></script>
+    <script>
+        <% for(i = 0;i < tasks.length;i++){ %>
+            var date = '<%=tasks[i].create_time%>';
+            var newDate = date.substring(6,8)+'/'+date.substring(4,6)+'/'+date.substring(0,4);
+            document.getElementById('date<%=i%>').innerHTML = newDate;
+        <%}%>
+        function converDate(i){
+            return i.substring(6,7)+'/'+i.substring(4,5)+i.substring(0,3);
+        }
+    </script>
 </div>
 </body>
 

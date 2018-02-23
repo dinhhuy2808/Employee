@@ -23,7 +23,7 @@ module.exports.home = function(req, res){
             if(err){
                 console.log(err);
             }
-            data={title:req.session.firstname+' | home',fname:req.session.firstname,project:rows,dateFormat:dateFormat,pic:req.session.pic};
+            data={title:req.session.firstname+' | home',fname:req.session.firstname,project:rows,dateFormat:dateFormat,pic:req.session.pic,type:req.session.type};
             res.render('home',data);
 
         });

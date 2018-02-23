@@ -14,6 +14,7 @@ module.exports.signup=function(req,res){
             firstname    : input.fname,
             lastname : input.lname,
             dob:newDOB,
+            type_id:2,
             password:passwd,
             create_time:dt_join
 		};
@@ -25,6 +26,7 @@ module.exports.signup=function(req,res){
 			req.session.fname=rows.firstname;
             req.session.lastname=rows.lastname;
 			req.session.id=rows.user_id;
+            req.session.type=rows.type_id;
 		}
 		res.redirect('/');
 			});

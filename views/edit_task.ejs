@@ -30,7 +30,26 @@
         <tr>
             <td>
                 <label>Assignee</label>
-                <input type="text" name="email" id="email" value='<%= tasks[0].assignee_email %>' required>
+                <%if(data.type == 1){%>
+                    <input type="text" name="email" id="email" value='<%= tasks[0].assignee_email %>' required>
+                <%} else {%>
+                <select name="email" id="email" onchange="ChangeThis()">
+                        <%if(tasks[0].assignee_email != null){%>
+
+                            <option value="" selected></option>
+
+                            <option value="me" selected><%= tasks[0].assignee_email %></option>
+                        <%} else {%>
+
+                            <option value="" selected></option>
+
+                            <option value="me">Assign to me</option>
+
+                        <%}%>
+
+                </select>
+                <%}%>
+
             </td>
             <td>
                 <label>Customer Name</label>
@@ -68,18 +87,27 @@
             </td>
         </tr>
         <tr>
+
             <td>
                 <label>Approved</label>
-                <select name="approved" id="approved">
-                    <option value="N" selected>No</option>
-                    <option value="Y">Yes</option>
-                </select>
+                <%if(data.type == 1) {%>
+                    <select name="approved" id="approved">
+                        <option value="N" selected>No</option>
+                        <option value="Y">Yes</option>
+                    </select>
+                <%} else {%>
+                    <select name="approved" id="approved" disabled>
+                        <option value="N" selected>No</option>
+                        <option value="Y">Yes</option>
+                    </select>
+                <%}%>
+
             </td>
         </tr>
         <tr>
             <td>
                 <label>Creator</label>
-                <input type="text" name="creator" id="creator" value='<%= tasks[0].reporter_firstname + ' '+tasks[0].reporter_lastname %>' required>
+                <input type="text" name="creator" id="creator" value='<%= tasks[0].reporter_firstname + ' '+tasks[0].reporter_lastname %>' required disabled>
             </td>
             <td>
                 <input type="text" name="creator_id" id="creator_id" value='<%= tasks[0].reporter_id %>'style="display: none">
@@ -100,7 +128,7 @@
 </body>
 <script type="text/javascript">
     $(document).ready(function () {
-        $('#email').keyup(function () {
+        /*$('#email').keyup(function () {
             $(".error").remove();
             var obj = $(this);
             if (obj.val().trim() != '') {
@@ -112,8 +140,8 @@
                         //alert(msg);
                         data = msg;
                         if (data.status == 'exist') {
-                            /* obj.after("<label class='error'>Email Id Aleady Exist</label>");*/
-                            /*$("#frmId .btn").attr('disabled', 'disabled');*/
+                            /!* obj.after("<label class='error'>Email Id Aleady Exist</label>");*!/
+                            /!*$("#frmId .btn").attr('disabled', 'disabled');*!/
                             document.getElementById('name').value = data.name;
                             document.getElementById('assignee_id').value = data.user_id;
                             document.getElementById('add').style.display = 'block';
@@ -121,7 +149,7 @@
                         else {
                             document.getElementById('name').value = '';
                             document.getElementById('add').style.display = 'none';
-                            /* $("#frmId .btn").removeAttr('disabled');*/
+                            /!* $("#frmId .btn").removeAttr('disabled');*!/
                         }
                     }
                 });
@@ -129,7 +157,7 @@
                 document.getElementById('add').style.display = 'block';
             }
 
-        });
+        });*/
 
     });
 
@@ -175,6 +203,17 @@
         location.search.replace(/[?&]+([^=&]+)=([^&]*)/gi,function(s,k,v){p[k]=v})
         return k?p[k]:p;
     }
+
+    function ChangeThis(){
+        var value = document.getElementById('email').value;
+        if(value == 'me'){
+            document.getElementById('assignee_id').value = "<%=data.userid%>";
+            document.getElementById('name').value = "<%= data.fname + ' '+data.lname%>";
+        }else{
+            document.getElementById('assignee_id').value = "0";
+        }
+
+    }
    /* function DoPost() {
 
         var varTaskCode = document.getElementById('taskcode').value;
@@ -208,5 +247,6 @@
     }*/
 
 </script>
+
 <%- include layout/footer.ejs %>
 </html>
