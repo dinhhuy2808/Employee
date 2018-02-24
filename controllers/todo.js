@@ -263,30 +263,88 @@ module.exports.save_task=function(req,res){
             }
             else{
                 console.log(err)
+                var dataAction={
+                    task_id : parseInt(rows.task_id),
+                    update_time : date.getTime(),
+                    status_id : parseInt(input.status),
+                    user_id : parseInt(req.session.user_id),
+                    description:'Create Task'
+                };
+                req.models.action.create(dataAction,function(err,row1s){
+                    if(err){
+                        console.log(err);
+                    }else{
+                        var date2 = new Date();
+                        date2.setTime(dataAction.update_time);
+                        console.log(date2.toString());
+                    }
+                });
             }
 
         });
     }
     else{
-        var sql = 'UPDATE `employee`.`task` ' +
-            'SET ' +
-            '`project_id` = '+input.project_id+', ';
-            if(req.session.type == 1){
-                sql+='`approved` = \''+input.approved+'\', ';
-            }
-            sql += '`status_id` = '+input.status+', ' +
-            '`assignee_id` = '+input.assignee_id+', ' +
-            '`estimate` = '+input.estimate+', ' +
-            '`log_work` = \''+input.log+'\', ' +
-            '`description` = \''+input.description+'\' ' +
-            ' WHERE `task`.`task_id` = '+input.task_id;
-        var con = req.db.driver.db;
-        con.query(sql, function (err, rows) {
+        req.models.task.find({task_id:input.task_id},function(err, row1){
             if(err){
                 console.log(err);
             }
+            else{
+                var con = req.db.driver.db;
+                var sqlInsAct = '';
+               if(row1[0].assignee_id != input.assignee_id){
+                   sqlInsAct += 'INSERT INTO `employee`.`action`(`task_id`,`update_time`,`status_id`,`user_id`,`description`)\n' +
+                       'VALUES('+input.task_id+',\''+date.getTime()+'\','+row1[0].status_id+','+req.session.user_id+',\'Change Assignee to '+input.name+'\');';
+               }
+                if(row1[0].estimate != input.estimate){
+                    sqlInsAct += 'INSERT INTO `employee`.`action`(`task_id`,`update_time`,`status_id`,`user_id`,`description`)\n' +
+                        'VALUES('+input.task_id+',\''+date.getTime()+'\','+row1[0].status_id+','+req.session.user_id+',\'Change Estimate to '+input.estimate+'\');';
+                }
+                if(row1[0].log_work.trim !== input.log){
+                    sqlInsAct += 'INSERT INTO `employee`.`action`(`task_id`,`update_time`,`status_id`,`user_id`,`description`)\n' +
+                        'VALUES('+input.task_id+',\''+date.getTime()+'\','+row1[0].status_id+','+req.session.user_id+',\'Change Log Work to '+input.log+'\');';
+                }
+                if(row1[0].description.trim !== input.description){
+                    sqlInsAct += 'INSERT INTO `employee`.`action`(`task_id`,`update_time`,`status_id`,`user_id`,`description`)\n' +
+                        'VALUES('+input.task_id+',\''+date.getTime()+'\','+row1[0].status_id+','+req.session.user_id+',\'Change Description to '+input.description+'\');';
+                }
+                if(req.session.type == 1){
+                    if(row1[0].approved.trim !== input.approved){
+                        sqlInsAct += 'INSERT INTO `employee`.`action`(`task_id`,`update_time`,`status_id`,`user_id`,`description`)\n' +
+                            'VALUES('+input.task_id+',\''+date.getTime()+'\','+row1[0].status_id+','+req.session.user_id+',\'Change Approved to '+input.approved+'\');';
+                    }
+                }
+                if(row1[0].status_id != input.status){
+                    sqlInsAct += 'INSERT INTO `employee`.`action`(`task_id`,`update_time`,`status_id`,`user_id`,`description`)\n' +
+                        'VALUES('+input.task_id+',\''+date.getTime()+'\','+row1[0].status_id+','+req.session.user_id+',\'Change Status to '+input.sttdesc+'\');';
+                }
+                con.query(sqlInsAct, function (err, row1s) {
+                    if(err){
+                        console.log(err);
+                    }
+                    else {
+                        var sql = 'UPDATE `employee`.`task` ' +
+                            'SET ' ;
+                        if(req.session.type == 1){
+                            sql+='`approved` = \''+input.approved+'\', ';
+                        }
+                        sql += '`status_id` = '+input.status+', ' +
+                            '`assignee_id` = '+input.assignee_id+', ' +
+                            '`estimate` = '+input.estimate+', ' +
+                            '`log_work` = \''+input.log+'\', ' +
+                            '`description` = \''+input.description+'\' ' +
+                            ' WHERE `task`.`task_id` = '+input.task_id;
+                        var con = req.db.driver.db;
+                        con.query(sql, function (err, rows) {
+                            if(err){
+                                console.log(err);
+                            }
 
+                        });
+                    }
+                });
+            }
         });
+
 
     }
     res.redirect('/show-task?id='+input.project_id);

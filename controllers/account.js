@@ -23,10 +23,10 @@ module.exports.signup=function(req,res){
 			console.log(err);
 		}
 		if(rows.user_id){
-			req.session.fname=rows.firstname;
-            req.session.lastname=rows.lastname;
-			req.session.id=rows.user_id;
-            req.session.type=rows.type_id;
+            req.session.firstname=rows[0].firstname;
+            req.session.lastname=rows[0].lastname;
+            req.session.user_id=rows[0].user_id;
+            req.session.type=rows[0].type_id;
 		}
 		res.redirect('/');
 			});
