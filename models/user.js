@@ -11,6 +11,7 @@ module.exports = function (orm, db) {
         lastname: {type: 'text'},
         create_time: {type: 'number'},
         password: {type: 'text'},
-        type_id: {type: 'number'}
+        type_id: {type: 'number'},
+        salary: {type: 'number'}
     });
 };

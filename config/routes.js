@@ -1,7 +1,9 @@
 module.exports=function(app,controllers){
 		app.get('/',controllers.index.home);
+    	app.get('/register',controllers.account.register);
 		app.post('/signup',controllers.account.signup);
 		app.post('/ajax/checkEmail',controllers.ajax.checkEmail);
+    	app.post('/ajax/checkUser',controllers.ajax.checkUser);
     	app.post('/ajax/checkEmailAddProject',controllers.ajax.checkEmailAddProject);
     	app.post('/ajax/checkProjectCode',controllers.ajax.checkProjectCode);
     	app.post('/ajax/getName',controllers.ajax.getName);
@@ -15,6 +17,7 @@ module.exports=function(app,controllers){
 		app.post('/save-task',controllers.todo.save_task);
 		app.get('/edit-task',controllers.todo.edit_task);
 		app.get('/delete-task/:id&:project',controllers.todo.delete_task);
-		app.get('/export-excel',controllers.other.export_excel);
+		app.get('/export-excel/project',controllers.other.export_excel);
+		app.get('/export-excel/user',controllers.other.export_excel_user);
 		app.get('/show-task',controllers.todo.show_task);
 	}

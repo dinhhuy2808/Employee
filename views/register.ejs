@@ -48,7 +48,7 @@
                 <div class="row">
                     <div class="col-md-3">
                         <a class="logo" href="index.html">
-                            <img src="img/logo-invert.png" alt="Image Alternative text" title="Image Title"/>
+                            <img src="img/logo-invert.png" alt="Image Alternative text" title="Image Title" />
                         </a>
                     </div>
                     <div class="col-md-3 col-md-offset-2">
@@ -64,13 +64,11 @@
                             <ul class="top-user-area-list list list-horizontal list-border">
                                 <li class="top-user-area-avatar">
                                     <a href="user-profile.html">
-                                        <img class="origin round" src="img/40x40.png" alt="Image Alternative text"
-                                             title="AMaze"/>Hi, John</a>
+                                        <img class="origin round" src="img/40x40.png" alt="Image Alternative text" title="AMaze" />Hi, <%= data.fname %></a>
                                 </li>
-                                <li><a href="#">Sign Out</a>
+                                <li><a href="/logout">Sign Out</a>
                                 </li>
-                                <li class="nav-drop"><a href="#">USD $<i class="fa fa-angle-down"></i><i
-                                                class="fa fa-angle-up"></i></a>
+                                <li class="nav-drop"><a href="#">USD $<i class="fa fa-angle-down"></i><i class="fa fa-angle-up"></i></a>
                                     <ul class="list nav-drop-menu">
                                         <li><a href="#">EUR<span class="right">€</span></a>
                                         </li>
@@ -84,51 +82,8 @@
                                         </li>
                                     </ul>
                                 </li>
-                                <li class="top-user-area-lang nav-drop">
-                                    <a href="#">
-                                        <img src="img/flags/32/uk.png" alt="Image Alternative text"
-                                             title="Image Title"/>ENG<i class="fa fa-angle-down"></i><i
-                                                class="fa fa-angle-up"></i>
-                                    </a>
-                                    <ul class="list nav-drop-menu">
-                                        <li>
-                                            <a title="German" href="#">
-                                                <img src="img/flags/32/de.png" alt="Image Alternative text"
-                                                     title="Image Title"/><span class="right">GER</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a title="Japanise" href="#">
-                                                <img src="img/flags/32/jp.png" alt="Image Alternative text"
-                                                     title="Image Title"/><span class="right">JAP</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a title="Italian" href="#">
-                                                <img src="img/flags/32/it.png" alt="Image Alternative text"
-                                                     title="Image Title"/><span class="right">ITA</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a title="French" href="#">
-                                                <img src="img/flags/32/fr.png" alt="Image Alternative text"
-                                                     title="Image Title"/><span class="right">FRE</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a title="Russian" href="#">
-                                                <img src="img/flags/32/ru.png" alt="Image Alternative text"
-                                                     title="Image Title"/><span class="right">RUS</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a title="Korean" href="#">
-                                                <img src="img/flags/32/kr.png" alt="Image Alternative text"
-                                                     title="Image Title"/><span class="right">KOR</span>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </li>
+
+
                             </ul>
                         </div>
                     </div>
@@ -207,6 +162,17 @@
                     </div>
 
                     <div class="form-group form-group-icon-left"><i class="fa fa-user input-icon input-icon-show"></i>
+                        <label>User Type</label>
+                        <select name="type" id="type" >
+                            <option value="2" selected>User</option>
+                            <option value="1" >Admin</option>
+
+
+
+                        </select>
+                    </div>
+
+                    <div class="form-group form-group-icon-left"><i class="fa fa-user input-icon input-icon-show"></i>
                         <label>Password</label>
                         <input class="form-control" type="password" name="password" required>
                         </br>
@@ -217,7 +183,7 @@
 
 
             </div>
-            <div class="col-md-4">
+            <!--<div class="col-md-4">
                 <h1>Login</h1>
 
                 <form action="login" method="post">
@@ -233,7 +199,7 @@
                     </div>
                     <input class="btn btn-primary" type="submit" value="Sign in"/>
                 </form>
-            </div>
+            </div>-->
         </div>
     </div>
 

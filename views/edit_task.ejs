@@ -207,13 +207,24 @@
                     <div class="form-group form-group-icon-left"><i class="fa fa-user input-icon input-icon-show"></i>
                         <label>Status</label>
                         <select name="status" id="status" onchange="selectChange()">
-                            <% for (var i = 0;i<data.status.length;i++){%>
-                            <%if(data.status[i].status_id == tasks[0].status_id){%>
-                            <option value="<%=data.status[i].status_id%>" selected><%=data.status[i].description%></option>
+                            <%if(data.type == 1){%>
+                                <% for (var i = 0;i<data.status.length;i++){%>
+                                <%if(data.status[i].status_id == tasks[0].status_id){%>
+                                <option value="<%=data.status[i].status_id%>" selected><%=data.status[i].description%></option>
+                                <%} else {%>
+                                <option value="<%=data.status[i].status_id%>"><%=data.status[i].description%></option>
+                                <%}%>
+                                <%}%>
                             <%} else {%>
-                            <option value="<%=data.status[i].status_id%>"><%=data.status[i].description%></option>
+                                <% for (var i = 0;i<data.status.length-2;i++){%>
+                                <%if(data.status[i].status_id == tasks[0].status_id){%>
+                                <option value="<%=data.status[i].status_id%>" selected><%=data.status[i].description%></option>
+                                <%} else {%>
+                                <option value="<%=data.status[i].status_id%>"><%=data.status[i].description%></option>
+                                <%}%>
+                                <%}%>
                             <%}%>
-                            <%}%>
+
 
                         </select>
                         <input class="form-control" type="text" name="sttdesc" id="sttdesc" value='' style="display: none" >

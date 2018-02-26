@@ -290,7 +290,28 @@ module.exports.save_task=function(req,res){
             }
             else{
                 var con = req.db.driver.db;
-                var sqlInsAct = '';
+
+                var sql = 'UPDATE `employee`.`task` ' +
+                    'SET ' ;
+                if(req.session.type == 1){
+                    sql+='`approved` = \''+input.approved+'\', ';
+                }
+                sql += '`status_id` = '+input.status+', ' +
+                    '`assignee_id` = '+input.assignee_id+', ' +
+                    '`estimate` = '+input.estimate+', ' +
+                    '`log_work` = \''+input.log+'\', ' +
+                    '`description` = \''+input.description+'\' ' +
+                    ' WHERE `task`.`task_id` = '+input.task_id;
+                var con = req.db.driver.db;
+                con.query(sql, function (err, rows) {
+                    if(err){
+                        console.log(err);
+                    }
+
+                });
+
+
+               /* var sqlInsAct = '';
                if(row1[0].assignee_id != input.assignee_id){
                    sqlInsAct += 'INSERT INTO `employee`.`action`(`task_id`,`update_time`,`status_id`,`user_id`,`description`)\n' +
                        'VALUES('+input.task_id+',\''+date.getTime()+'\','+row1[0].status_id+','+req.session.user_id+',\'Change Assignee to '+input.name+'\');';
@@ -341,7 +362,7 @@ module.exports.save_task=function(req,res){
 
                         });
                     }
-                });
+                });*/
             }
         });
 
