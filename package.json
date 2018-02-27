@@ -15,6 +15,7 @@
 		"excel-export": "*",
 		"express": "3.x",
 		"just-mvc": "*",
-		"mysql": "^2.15.0"
+		"mysql": "^2.15.0",
+		"nodemailer": "^4.6.0"
 	}
 }

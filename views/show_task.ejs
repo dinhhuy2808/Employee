@@ -252,7 +252,24 @@
                                         <p class="booking-item-description"> <%= tasks[i].reporter_firstname + ' ' + tasks[i].reporter_lastname+ ' (' + tasks[i].reporter_email + ')'%></p>
                                     </div>
                                     <div class="col-md-1">
-                                        <p class="booking-item-description"> <%= tasks[i].status %></p>
+                                        <p class="booking-item-description">
+                                            <%if(tasks[i].status_id == 1) {%>
+                                                <img src="img/icon/open.png" alt="Image Alternative text"
+                                                     title="Image Title"/>
+                                            <%} else if(tasks[i].status_id == 2) {%>
+                                                <img src="img/icon/progress.png" alt="Image Alternative text"
+                                                     title="Image Title"/>
+                                            <%} else if(tasks[i].status_id == 3) {%>
+                                                <img src="img/icon/resolved.png" alt="Image Alternative text"
+                                                     title="Image Title"/>
+                                            <%} else if(tasks[i].status_id == 4) {%>
+                                                <img src="img/icon/reopen.png" alt="Image Alternative text"
+                                                     title="Image Title"/>
+                                            <%} else {%>
+                                                <img src="img/icon/paid.png" alt="Image Alternative text"
+                                                     title="Image Title"/>
+                                            <%}%>
+                                        </p>
                                     </div>
                                     <div class="col-md-2">
                                         <% if(tasks[i].approved == 'Y') {%>

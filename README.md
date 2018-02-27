@@ -5,6 +5,7 @@ just download and run
 goto todo-list folder and type bellow syntext
 npm install 
 npm install mysql
+npm install nodemailer
 $ node server
 
 and go to your browser and open http://localhost:8080

@@ -168,15 +168,23 @@
                             <div class="col-md-6">
                                 <div class="form-group form-group-icon-left">
                                     <label>Customer Account/Email</label>
-                                    <input type="text" name="email" id="email" required>
+                                    <select name="email" id="email" required>
+                                        <option value="" selected>-----Select-----</option>
+                                        <%for(i = 0 ; i < data.users.length ; i++){%>
+                                            <option value = '<%=data.users[i].email%>'><%=data.users[i].email + ' ( '+data.users[i].firstname+' '+data.users[i].lastname+' )'%></option>
+                                        <%}%>
+
+
+                                    </select>
+
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                            <!--<div class="col-md-4">
                                 <div class="form-group form-group-icon-left">
                                     <label>Customer Name</label>
                                     <input type="text" name="name" id="name" disabled>
                                 </div>
-                            </div>
+                            </div>-->
                         </div>
 
 
@@ -293,8 +301,8 @@
 </div>
 </body>
 <script type="text/javascript">
-    $(document).ready(function () {
-        $('#email').keyup(function () {
+    /*$(document).ready(function () {
+        $('#email').onchange(function () {
             $(".error").remove();
             var obj = $(this);
             $.ajax({
@@ -305,20 +313,20 @@
                     //alert(msg);
                     data = msg;
                     if (data.status == 'exist') {
-                        /* obj.after("<label class='error'>Email Id Aleady Exist</label>");*/
-                        /*$("#frmId .btn").attr('disabled', 'disabled');*/
+                        /!* obj.after("<label class='error'>Email Id Aleady Exist</label>");*!/
+                        /!*$("#frmId .btn").attr('disabled', 'disabled');*!/
                         document.getElementById('name').value = data.name;
                         document.getElementById('add').style.display = 'block';
                     }
                     else {
                         document.getElementById('add').style.display = 'none';
-                        /* $("#frmId .btn").removeAttr('disabled');*/
+                        /!* $("#frmId .btn").removeAttr('disabled');*!/
                     }
                 }
             });
         });
 
-    });
+    });*/
 
     $(document).ready(function () {
         $('#code').keyup(function () {

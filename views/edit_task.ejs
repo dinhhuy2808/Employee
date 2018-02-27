@@ -168,20 +168,20 @@
                         <select name="email" id="email" onchange="ChangeThis()">
                             <%if(tasks[0].assignee_email != null){%>
 
-                            <option value="" selected></option>
+                            <option value="" ></option>
 
-                            <option value="me" selected><%= tasks[0].assignee_email %></option>
+                            <option value="<%= tasks[0].assignee_email %>" selected><%= tasks[0].assignee_email %></option>
                             <%} else {%>
 
                             <option value="" selected></option>
 
-                            <option value="me">Assign to me</option>
+                            <option value="<%= tasks[0].assignee_email %>">Assign to me</option>
 
                             <%}%>
 
                         </select>
                         <%}%>
-                        <input type="text" name="assignee_id" id="assignee_id" value = '0' style="display: none">
+                        <input type="text" name="assignee_id" id="assignee_id" value = '<%= tasks[0].assignee_id %>' style="display: none">
                     </div>
 
                     <!--<div class="form-group form-group-icon-left"><i class="fa fa-user input-icon input-icon-show"></i>
@@ -190,7 +190,7 @@
                     </div>-->
 
                     <div class="form-group form-group-icon-left"><i class="fa fa-user input-icon input-icon-show"></i>
-                        <label>Customer Name</label>
+                        <label>Assignee Name</label>
                         <input class="form-control" type="text" name="name" id="name" value='<%= tasks[0].assignee_firstname  + ' ' + tasks[0].assignee_lastname%>' disabled>
                     </div>
 
@@ -237,6 +237,7 @@
                         <select name="approved" id="approved">
                             <option value="N" selected>No</option>
                             <option value="Y">Yes</option>
+                            <option value="D">Deny</option>
                         </select>
                         <%} else {%>
                         <select name="approved" id="approved" disabled>
@@ -442,7 +443,7 @@
 
     function ChangeThis(){
         var value = document.getElementById('email').value;
-        if(value == 'me'){
+        if(value != ''){
             document.getElementById('assignee_id').value = "<%=data.userid%>";
             document.getElementById('name').value = "<%= data.fname + ' '+data.lname%>";
         }else{

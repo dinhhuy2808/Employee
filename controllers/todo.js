@@ -1,8 +1,19 @@
+var nodemailer = require('nodemailer');
 //add project
 module.exports.add_project = function(req, res){
 	if(typeof req.session.user_id!='undefined'){
-		data={title:'Add todo | '+req.session.fname,fname:req.session.fname};
-		res.render('add_project',data);
+	    var sql = 'select firstname,lastname,email from user where type_id = 3;'
+        var con = req.db.driver.db;
+        con.query(sql, function (err, rows) {
+            if(err){
+                console.log(err);
+            }
+            else{
+                data={title:'Add todo | '+req.session.fname,fname:req.session.fname,users:rows};
+                res.render('add_project',data);
+            }
+        });
+
 	}
 	else{
 		res.redirect('/');
@@ -188,16 +199,7 @@ module.exports.show_task=function(req,res){
 
 };
 
-//add project
-module.exports.add_project = function(req, res){
-    if(typeof req.session.user_id!='undefined'){
-        data={title:'Add todo | '+req.session.fname,fname:req.session.fname};
-        res.render('add_project',data);
-    }
-    else{
-        res.redirect('/');
-    }
-};
+
 
 //add task
 module.exports.add_task = function(req, res){
@@ -294,7 +296,12 @@ module.exports.save_task=function(req,res){
                 var sql = 'UPDATE `employee`.`task` ' +
                     'SET ' ;
                 if(req.session.type == 1){
-                    sql+='`approved` = \''+input.approved+'\', ';
+                    if(input.approved == 'D'){
+                        sql+='`approved` = \'N\', ';
+                    }else{
+                        sql+='`approved` = \''+input.approved+'\', ';
+                    }
+
                 }
                 sql += '`status_id` = '+input.status+', ' +
                     '`assignee_id` = '+input.assignee_id+', ' +
@@ -307,7 +314,47 @@ module.exports.save_task=function(req,res){
                     if(err){
                         console.log(err);
                     }
+                    else {
+                        if(row1[0].approved.trim !== input.approved && req.session.type == 1){
+                            var content = 'Your task '+row1[0].task_code +' has ';
+                            if(input.approved == 'Y'){
+                                content += 'been Approved. '
+                            }else{
+                                content += 'not been Approved. '
+                            }
+                            const option = {
+                                service: 'gmail',
+                                auth: {
+                                    user: 'huyt71@gmail.com', // email hoặc username
+                                    pass: '01663036577'
+                                }
+                            };
+                            var transporter = nodemailer.createTransport(option);
 
+                            transporter.verify(function(error, success) {
+                                // Nếu có lỗi.
+                                if (error) {
+                                    console.log(error);
+                                } else { //Nếu thành công.
+                                    console.log('Kết nối thành công!');
+                                    var mail = {
+                                        from: 'huyt71@gmail.com', // Địa chỉ email của người gửi
+                                        to: input.email, // Địa chỉ email của người gửi
+                                        subject: 'ABC Comp Anouncement', // Tiêu đề mail
+                                        text: content, // Nội dung mail dạng text
+                                    };
+                                    //Tiến hành gửi email
+                                    transporter.sendMail(mail, function(error, info) {
+                                        if (error) { // nếu có lỗi
+                                            console.log(error);
+                                        } else { //nếu thành công
+                                            console.log('Email sent: ' + info.response);
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                    }
                 });
 
 
