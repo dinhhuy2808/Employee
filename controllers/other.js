@@ -150,3 +150,111 @@ module.exports.export_excel_user=function(req,res){
     });
 
 };
+module.exports.export_excel_count=function(req,res){
+    var nodeExcel=require('excel-export');
+    var dateFormat = require('dateformat');
+    var conf={}
+    conf.cols=[{
+        caption:'Name',
+        type:'string',
+        width:30
+    },
+
+        {
+            caption:'Email',
+            type:'string',
+            width:30
+        },
+
+        {
+            caption:'Salary/Hour (USD)',
+            type:'String',
+            width:30
+        },
+
+        {
+            caption:'Project',
+            type:'String',
+            width:50
+        },
+        {
+            caption:'Task Code',
+            type:'String',
+            width:20
+        },
+        {
+            caption:'Status',
+            type:'String',
+            width:10
+        },
+        {
+            caption:'Estimate (hour)',
+            type:'String',
+            width:10
+        }
+
+    ];
+
+    var sql = 'select * ,\n' +
+        '(select firstname from user u where u.user_id = t.assignee_id) as firstname,\n' +
+        '(select lastname from user u where u.user_id = t.assignee_id) as lastname,\n' +
+        '(select email from user u where u.user_id = t.assignee_id) as email,\n' +
+        '(select salary from user u where u.user_id = t.assignee_id) as salary,\n' +
+        '(select description from status s where s.status_id = t.status_id) as status,\n' +
+        '(select project_name from project p where p.project_id = t.project_id) as project\n' +
+        'from task t where status_id = 5 order by assignee_id;';
+    var con = req.db.driver.db;
+    con.query(sql, function (err, rows) {
+        if(err){
+            console.log(err);
+            res.redirect('/');
+        }
+        else{
+            arr=[];
+            arr.push(['','','','','','','']);
+            var temp = 0;
+            var total = 0;
+            for(i=0;i<rows.length;i++){
+                if(temp != 0){
+                    if(temp == parseInt(rows[i].assignee_id)){
+                        a=['',
+                            '',
+                            '',
+                            rows[i].project,
+                            rows[i].task_code,
+                            rows[i].status,
+                            rows[i].estimate];
+                    }else{
+                        temp = parseInt(rows[i].assignee_id);
+                        a=[rows[i].firstname+' '+rows[i].lastname,
+                            rows[i].email,
+                            rows[i].salary,
+                            rows[i].project,
+                            rows[i].task_code,
+                            rows[i].status,
+                            rows[i].estimate];
+                    }
+                }else{
+                    temp = parseInt(rows[i].assignee_id);
+                    a=[rows[i].firstname+' '+rows[i].lastname,
+                        rows[i].email,
+                        rows[i].salary,
+                        rows[i].project,
+                        rows[i].task_code,
+                        rows[i].status,
+                        rows[i].estimate];
+
+                }
+                total += (parseFloat(rows[i].estimate) * parseFloat(rows[i].salary));
+                arr.push(a);
+            }
+            arr.push(['','','','','','Total: ',total +' USD']);
+            conf.rows=arr;
+            var result=nodeExcel.execute(conf);
+            res.setHeader('Content-Type','application/vnd.openxmlformates');
+            res.setHeader("Content-Disposition","attachment;filename="+"user.xlsx");
+            res.end(result,'binary');
+        }
+    });
+
+};

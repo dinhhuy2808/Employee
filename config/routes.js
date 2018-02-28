@@ -19,5 +19,6 @@ module.exports=function(app,controllers){
 		app.get('/delete-task/:id&:project',controllers.todo.delete_task);
 		app.get('/export-excel/project',controllers.other.export_excel);
 		app.get('/export-excel/user',controllers.other.export_excel_user);
+    	app.get('/export-excel/count',controllers.other.export_excel_count);
 		app.get('/show-task',controllers.todo.show_task);
 	}

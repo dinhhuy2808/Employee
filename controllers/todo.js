@@ -315,7 +315,10 @@ module.exports.save_task=function(req,res){
                         console.log(err);
                     }
                     else {
-                        if(row1[0].approved.trim !== input.approved && req.session.type == 1){
+                        var temp1 = row1[0].approved;
+                        var temp2 = input.approved;
+                        if((temp1 != temp2)
+                            && (req.session.type == 1)){
                             var content = 'Your task '+row1[0].task_code +' has ';
                             if(input.approved == 'Y'){
                                 content += 'been Approved. '
