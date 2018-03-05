@@ -6,12 +6,14 @@ module.exports = function (orm, db) {
         dob: {type: 'number'},
         status: {type: 'number'},
         phone: {type: 'number'},
-        place_id: {type: 'number'},
         firstname: {type: 'text'},
         lastname: {type: 'text'},
         create_time: {type: 'number'},
         password: {type: 'text'},
         type_id: {type: 'number'},
-        salary: {type: 'number'}
+        salary: {type: 'number'},
+        country: {type: 'text'},
+        city: {type: 'text'},
+        address: {type: 'text'}
     });
 };

@@ -1,6 +1,9 @@
 module.exports=function(app,controllers){
 		app.get('/',controllers.index.home);
     	app.get('/register',controllers.account.register);
+    	app.get('/maintenance',controllers.account.show_account);
+		app.get('/edit-account',controllers.account.edit_account);
+    	app.post('/save-account',controllers.account.save_account);
 		app.post('/signup',controllers.account.signup);
 		app.post('/ajax/checkEmail',controllers.ajax.checkEmail);
     	app.post('/ajax/checkUser',controllers.ajax.checkUser);

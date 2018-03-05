@@ -432,6 +432,7 @@
 
 
     <div class="container">
+        <h3><a href="/">Home</a> > <a href="/maintenance">Account Maintenance</a></h3>
         <!--<ul class="breadcrumb">
             <li><a href="index.html">Home</a>
             </li>
@@ -444,40 +445,50 @@
             <li class="active">New York City Hotels</li>
         </ul>-->
 
-        <form action = '/' method = 'get'>
+        <form action = '/maintenance' method = 'get'>
             <label>Filtered By </label>
             <div class="row">
                 <div class="col-md-4">
-                    <div class="form-group form-group-icon-left">
-                        <label>Customer Email:</label>
+                    <div class="form-group">
+                        <label>First Name :</label>
                     </div>
 
                 </div>
                 <div class="col-md-4">
-                    <div class="form-group form-group-icon-left">
-                        <label>Customer Name: </label>
+                    <div class="form-group">
+                        <label>Last Name: </label>
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <div class="form-group form-group-icon-left">
+                    <div class="form-group">
+                        <label>Email: </label>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
                         <label>       </label>
                     </div>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-4">
-                    <div class="form-group form-group-icon-left">
-                        <input class="typeahead form-control" name = 'email' id = 'email' value=""  type="text" />
+                    <div class="form-group">
+                        <input class=" form-control" name = 'fname' id = 'fname' value=""  type="text" />
                     </div>
 
                 </div>
                 <div class="col-md-4">
-                    <div class="form-group form-group-icon-left">
-                        <input class="typeahead form-control" name = 'name' id = 'name' value=""  type="text" />
+                    <div >
+                        <input class="form-control" name = 'lname' id = 'lname' value=""  type="text" />
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <div class="form-group form-group-icon-left">
+                    <div class="form-group">
+                        <input class=" form-control" name = 'email' id = 'email' value=""  type="text" />
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
                         <input class="btn btn-primary" value = 'Search' type = 'submit'></input>
                     </div>
                 </div>
@@ -488,100 +499,56 @@
         <div class="row">
 
             <div class="col-md-12">
-                <%if (data.type == 1){%>
-                    <table>
-                        <tr>
-                            <td>
-                                <a class="btn btn-primary" href="add-project">Add Project</a>
-                            </td>
-                            <td>
-                                <div class="nav">
-                                    <ul class="slimmenu" id="slimmenu">
-                                        <li><a href="/">Account</a>
-                                            <ul>
-                                                <li><a href="register">Create</a>
-                                                </li>
-                                               <li><a href="maintenance">Maintenance</a>
-                                                </li>
 
-                                            </ul>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </td>
-
-                            <td>
-                                <div class="nav">
-                                    <ul class="slimmenu" id="slimmenu">
-                                        <li><a href="/">Export Excel</a>
-                                            <ul>
-                                                <li><a href="export-excel/project">Project Detail</a>
-                                                </li>
-                                                <li><a href="export-excel/user">User Detail</a>
-                                                </li>
-                                                <li><a href="export-excel/count">Payment</a>
-                                                </li>
-                                            </ul>
-                                        </li>
-                                    </ul>
-                                </div>
-
-                            </td>
-                        </tr>
-
-                    </table>
-
-                <%}%>
 
 
                 <ul class="booking-list">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <h4 class="booking-item-title">First Name</h4>
+                        </div>
+                        <div class="col-md-2">
+                            <h4 class="booking-item-title">Last Name</h4>
+                        </div>
+                        <div class="col-md-2">
+                            <h4 class="booking-item-title">Email</h4>
+                        </div>
+                        <div class="col-md-1">
+                            <h4 class="booking-item-title">Salary</h4>
+                        </div>
+                        <div class="col-md-2">
+                            <h4 class="booking-item-title">Phone Numb</h4>
+                        </div>
 
-                    <% for(i = 0;i < project.length;i++){ %>
+                    </div>
+                    <% for(i = 0;i < users.length;i++){ %>
                     <li>
-                        <a class="booking-item" href="/show-task?id=<%= project[i].project_id %>">
+                        <a class="booking-item" href="/edit-account?email=<%=users[i].email%>">
                             <div class="row">
-                                <!-- <div class="col-md-3">
-                                     <div class="booking-item-img-wrap">
-                                         <img src="img/800x600.png" alt="Image Alternative text" title="LHOTEL PORTO BAY SAO PAULO suite lhotel living room" />
-                                         <div class="booking-item-img-num"><i class="fa fa-picture-o"></i>28</div>
-                                     </div>
-                                 </div>-->
-                                <div class="col-md-6">
-                                    <!-- <div class="booking-item-rating">
-                                        <ul class="icon-group booking-item-rating-stars">
-                                            <li><i class="fa fa-star"></i>
-                                            </li>
-                                            <li><i class="fa fa-star"></i>
-                                            </li>
-                                            <li><i class="fa fa-star"></i>
-                                            </li>
-                                            <li><i class="fa fa-star"></i>
-                                            </li>
-                                            <li><i class="fa fa-star-o"></i>
-                                            </li>
-                                        </ul><span class="booking-item-rating-number"><b >3.9</b> of 5</span><small>(1199 reviews)</small>
-                                    </div>-->
-                                    <h5 class="booking-item-title">Project :  <%= project[i].project_name %></h5>
-                                    <p class="booking-item-title" style="display:none;"><%= project[i].customer_id %></p>
-                                    <p class="booking-item-title">Customer : <%= project[i].firstname +' '+ project[i].lastname + ' ('+ project[i].email +')'%></p>
-                                    <p class="booking-item-title">Project Code: <%= project[i].code %></p>
-                                </div>
-                               <div class="col-md-3">
-                                   <table>
-                                       <tr>
-                                           <td>
-                                               <a class="btn btn-primary" href="/edit-project?id=<%= project[i].project_id%>">Edit</a>
-                                           </td>
-                                           <td>
-                                               <a class="btn btn-primary"  href="/delete-project/<%= project[i].project_id %>">Delete</a>
-                                           </td>
-                                       </tr>
 
-                                   </table>
-                                  <!-- <span class="btn btn-primary" href="/edit-project?id=<%= project[i].project_id%>">Edit</span>
-                                   &nbsp;&nbsp;
-                                   <span class="btn btn-primary" href="/delete-project/<%= project[i].project_id %>">Delete</span>-->
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        <p class="booking-item-description"><%= users[i].firstname %></p>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <p class="booking-item-description">
+                                            <%= users[i].lastname %>
+
+                                        </p>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <p class="booking-item-description"> <%= users[i].email %></p>
+                                    </div>
+
+                                    <div class="col-md-2">
+                                        <p class="booking-item-description"> <%= users[i].salary %></p>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <p class="booking-item-description" ><%= users[i].phone %></p>
+                                    </div>
+
                                 </div>
+
                             </div>
                         </a>
                     </li>

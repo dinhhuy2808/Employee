@@ -28,7 +28,10 @@ module.exports.signup=function(req,res){
             password:passwd,
             create_time:parseInt(year+''+month+''+day),
 			salary:parseFloat(input.salary),
-			type_id : parseInt(input.type)
+			type_id : parseInt(input.type),
+            country : input.country,
+            city : input.city,
+            address : input.addr
 		};
 		req.models.user.create(dataUser, function(err, rows) {
 					if(err){ 
@@ -75,3 +78,81 @@ module.exports.register=function(req,res){
 
     res.render('register',data);
 };
+
+module.exports.show_account = function(req, res){
+        //delete req.session;
+        if(typeof req.session.user_id!='undefined'){
+
+            var sql = 'select * from user ';
+            if( (req.query.fname != undefined &&  req.query.fname != '')
+                ||  (req.query.lname != undefined &&  req.query.lname != '')
+                ||  (req.query.email != undefined &&  req.query.email != '')){
+                sql += ' where  ';
+            }
+            if(req.query.fname != '' && req.query.fname != undefined){
+                sql += 'firstname = \''+req.query.fname+'\'';
+            }
+            if(req.query.lname != '' && req.query.lname != undefined){
+                sql += 'lastname = \''+req.query.lname+'\'';
+            }
+            if(req.query.email != '' && req.query.email != undefined){
+                sql += 'email = \''+req.query.email+'\'';
+            }
+            var con = req.db.driver.db;
+            con.query(sql, function (err, rows) {
+                if(err){
+                    console.log(err);
+                    res.redirect('/maintenance')
+                }else{
+                    data={title:req.session.firstname+' | home',fname:req.session.firstname,users:rows,dateFormat:dateFormat,pic:req.session.pic,type:req.session.type};
+                    res.render('accounts',data);
+				}
+
+
+            });
+
+        }
+
+    };
+
+module.exports.edit_account = function(req, res){
+		req.models.user.find({email:req.query.email},function(err,rows){
+			if(err){
+				console.log(err);
+			}
+			else{
+                data={title:'Edit Account | '+req.session.firstname,fname:req.session.firstname,user:rows};
+                res.render('edit_account',data);
+
+			}
+		});
+
+    };
+module.exports.save_account = function(req, res){
+    var input=JSON.parse(JSON.stringify(req.body));
+        req.models.user.get(input.id,function(err,rows){
+            if(err){
+                console.log(err);
+            }
+            else{
+
+                rows.username=input.username;
+                rows.email   = input.email;
+                rows.phone    = input.phone;
+                rows.firstname    = input.fname;
+                rows.lastname = input.lname;
+                rows.salary=parseFloat(input.salary);
+                rows.type_id = parseInt(input.type);
+                rows.country = input.country;
+                rows.city = input.city;
+                rows.address = input.addr
+                rows.save(data,function(err){
+                    console.log('saved');
+                });
+            }
+             res.redirect('/maintenance');
+        });
+
+
+};
+
