@@ -135,7 +135,17 @@ module.exports.save_account = function(req, res){
                 console.log(err);
             }
             else{
+                var date = new Date();
+                var month = date.getMonth() + 1;
+                month = (month < 10 ? "0" : "") + month;
 
+                var day  = date.getDate();
+                day = (day < 10 ? "0" : "") + day;
+                var year = date.getUTCFullYear();
+
+                var dt_join=Math.round(+new Date()/1000);
+                var birth = input.dob.split("/");
+                var newDOB = birth[2]+birth[1]+birth[0];
                 rows.username=input.username;
                 rows.email   = input.email;
                 rows.phone    = input.phone;
@@ -145,7 +155,8 @@ module.exports.save_account = function(req, res){
                 rows.type_id = parseInt(input.type);
                 rows.country = input.country;
                 rows.city = input.city;
-                rows.address = input.addr
+                rows.address = input.addr;
+                rows.dob = parseInt(newDOB);
                 rows.save(data,function(err){
                     console.log('saved');
                 });

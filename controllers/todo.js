@@ -298,13 +298,16 @@ module.exports.save_task=function(req,res){
                 if(req.session.type == 1){
                     if(input.approved == 'D'){
                         sql+='`approved` = \'N\', ';
+                        sql+='`assignee_id` = 0, ';
                     }else{
                         sql+='`approved` = \''+input.approved+'\', ';
+                        sql+='`assignee_id` = '+input.assignee_id+', ';
                     }
 
+                }else{
+                    sql+='`assignee_id` = '+input.assignee_id+', ';
                 }
                 sql += '`status_id` = '+input.status+', ' +
-                    '`assignee_id` = '+input.assignee_id+', ' +
                     '`estimate` = '+input.estimate+', ' +
                     '`log_work` = \''+input.log+'\', ' +
                     '`description` = \''+input.description+'\' ' +
