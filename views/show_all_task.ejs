@@ -134,21 +134,31 @@
     <div class="container">
 
 
-        <h3><a href="/">Project</a> > <a href="/show-task?id=<%=project[0].project_id%>"><%=project[0].project_name%></a></h3>
+        <h3><a href="/">Project</a> > <a href="/show-task">All Tasks</a></h3>
         <br/>
         <h1 class="booking-title">Task List<small><!--<a class="popup-text" href="#search-dialog" data-effect="mfp-zoom-out">Change search</a>--></small></h1>
-        <form action = '/show-task?id=<%=project[0].project_id%>' method = 'get'>
+        <form action = '/show-task' method = 'get'>
             <h2>Filtered By </h2>
             <div class="booking-item-dates-change mb30">
             <div class="row">
-                <input class="typeahead form-control" name = 'id' id = 'id' value="<%=project[0].project_id%>"  type="text" style="display: none"/>
+                <%if(data.type != 2){%>
                     <div class="col-md-3">
                         <div class="form-group form-group-icon-left">
                             <label>Assignee :</label>
-                            <input class="typeahead form-control" name = 'assigneeflt' id = 'assigneeflt' value=""  type="text" />
+                            <input  class="typeahead form-control" name = 'assigneeflt' id = 'assigneeflt' value=""  type="text" />
                         </div>
 
                     </div>
+                <%}else {%>
+                    <div class="col-md-3" style="display: none">
+                        <div class="form-group form-group-icon-left">
+                            <label>Assignee :</label>
+                            <input  class="typeahead form-control" name = 'assigneeflt' id = 'assigneeflt' value="<%=tasks[0].assignee_email%>"  type="text"  />
+                        </div>
+
+                    </div>
+                <%}%>
+
                     <div class="col-md-3">
                         <div class="form-group form-group-icon-left">
                             <label>Reporter : </label>
@@ -186,17 +196,7 @@
         </form>
         <br/>
 
-        <table>
-            <tr>
-                <td>
-                    <a class="btn btn-primary" href="add-task?project_id=<%=project[0].project_id%>&tasksize=<%=tasks.length%>&code=<%=project[0].code%>">Add Task</a>
-                </td>
-                <!--<td>
-                    <a class="btn btn-primary" href="export-excel">Export Excel</a>
-                </td>-->
-            </tr>
 
-        </table>
 
         <br/>
         <div class="row">
@@ -205,9 +205,12 @@
 
                 <ul class="booking-list">
                     </br>
+                    <%if(data.tasks.length > 0){%>
                     <input type = text value = '<%=project[0].code%>' id = 'code' name = 'code' style = 'display: none'>
                     <input type = text value = '<%=tasks.length%>' id = 'tasksize' name = 'tasksize' style = 'display: none'>
                     <input type = text value = '<%=project[0].project_id%>' id = 'proj_id' name = 'proj_id' style = 'display: none'>
+
+                    <%}%>
                     <div class="row">
                         <div class="col-md-2">
                             <h4 class="booking-item-title">Task Code</h4>

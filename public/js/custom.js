@@ -57,22 +57,78 @@ $('.typeahead').typeahead({
     source: function(q, cb) {
         return $.ajax({
             dataType: 'json',
-            type: 'get',
-            url: 'http://gd.geobytes.com/AutoCompleteCity?callback=?&q=' + q,
+            type: 'post',
+            url: "./ajax/getEmail",
+            data: "mode=check_email&string=" + q,
             chache: false,
-            success: function(data) {
+            success: function(datas) {
                 var result = [];
-                $.each(data, function(index, val) {
+                /*result = datas.names;*/
+                $.each(datas.names, function(index, val) {
                     result.push({
-                        value: val
+                        value: val.email
                     });
                 });
+
                 cb(result);
             }
         });
     }
 });
+$('.typeahead-project').typeahead({
+    hint: true,
+    highlight: true,
+    minLength: 3,
+    limit: 8
+}, {
+    source: function(q, cb) {
+        return $.ajax({
+            dataType: 'json',
+            type: 'post',
+            url: "./ajax/getProject",
+            data: "mode=check_email&string=" + q,
+            chache: false,
+            success: function(datas) {
+                var result = [];
+                /*result = datas.names;*/
+                $.each(datas.names, function(index, val) {
+                    result.push({
+                        value: val.code
+                    });
+                });
 
+                cb(result);
+            }
+        });
+    }
+});
+$('.typeahead-task').typeahead({
+    hint: true,
+    highlight: true,
+    minLength: 3,
+    limit: 8
+}, {
+    source: function(q, cb) {
+        return $.ajax({
+            dataType: 'json',
+            type: 'post',
+            url: "./ajax/getTask",
+            data: "mode=check_email&string=" + q,
+            chache: false,
+            success: function(datas) {
+                var result = [];
+                /*result = datas.names;*/
+                $.each(datas.names, function(index, val) {
+                    result.push({
+                        value: val.task_code
+                    });
+                });
+
+                cb(result);
+            }
+        });
+    }
+});
 
 $('input.date-pick, .input-daterange, .date-pick-inline').datepicker({
     todayHighlight: true

@@ -26,7 +26,7 @@ app.use(
 		user: 'root',
 		password : 'root',
 		port : 3306,
-		database:'node_store'
+		database:'employee'
 	},'request')
 );
 /*****************************************/

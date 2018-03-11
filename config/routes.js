@@ -7,9 +7,13 @@ module.exports=function(app,controllers){
 		app.post('/signup',controllers.account.signup);
 		app.post('/ajax/checkEmail',controllers.ajax.checkEmail);
     	app.post('/ajax/checkUser',controllers.ajax.checkUser);
+		app.post('/ajax/getEmail',controllers.ajax.getEmail);
     	app.post('/ajax/checkEmailAddProject',controllers.ajax.checkEmailAddProject);
     	app.post('/ajax/checkProjectCode',controllers.ajax.checkProjectCode);
     	app.post('/ajax/getName',controllers.ajax.getName);
+    	app.post('/ajax/getProject',controllers.ajax.getProject);
+    	app.post('/ajax/getTask',controllers.ajax.getTask);
+    	app.post('/ajax/count',controllers.ajax.count);
 		app.post('/login',controllers.account.login);
 		app.get('/logout',controllers.account.logout);
 		app.get('/add-project',controllers.todo.add_project);
@@ -23,5 +27,6 @@ module.exports=function(app,controllers){
 		app.get('/export-excel/project',controllers.other.export_excel);
 		app.get('/export-excel/user',controllers.other.export_excel_user);
     	app.get('/export-excel/count',controllers.other.export_excel_count);
+    	app.get('/export-excel/paid',controllers.other.paid);
 		app.get('/show-task',controllers.todo.show_task);
 	}

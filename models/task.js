@@ -10,6 +10,7 @@ module.exports = function (orm, db) {
         log_work: {type: 'text'},
         description: {type: 'text'},
         reporter_id: {type: 'number'},
-        task_code: {type: 'text'}
+        task_code: {type: 'text'},
+        close_time: {type: 'number'}
     });
 };

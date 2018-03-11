@@ -49,7 +49,16 @@ module.exports.signup=function(req,res){
 //login
 module.exports.login=function(req,res){
 	var input=JSON.parse(JSON.stringify(req.body));
-		var data={
+	var sql = 'use employee;'
+    var con = req.db.driver.db;
+    con.query(sql, function (err, rows) {
+        if(err){
+            console.log(err);
+        }
+
+    });
+
+    var data={
 			email:input.email,
 			password:md5(input.password)
 		};
@@ -83,7 +92,7 @@ module.exports.show_account = function(req, res){
         //delete req.session;
         if(typeof req.session.user_id!='undefined'){
 
-            var sql = 'select * from user ';
+            var sql = 'select * from employee.user ';
             if( (req.query.fname != undefined &&  req.query.fname != '')
                 ||  (req.query.lname != undefined &&  req.query.lname != '')
                 ||  (req.query.email != undefined &&  req.query.email != '')){

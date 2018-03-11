@@ -2,7 +2,7 @@ var nodemailer = require('nodemailer');
 //add project
 module.exports.add_project = function(req, res){
 	if(typeof req.session.user_id!='undefined'){
-	    var sql = 'select firstname,lastname,email from user where type_id = 3;'
+	    var sql = 'select firstname,lastname,email from employee.user where type_id = 3;'
         var con = req.db.driver.db;
         con.query(sql, function (err, rows) {
             if(err){
@@ -140,61 +140,136 @@ module.exports.save_todo=function(req,res){
 
 //Show Task
 module.exports.show_task=function(req,res){
-    var sql = 'SELECT `task`.`task_id`,\n' +
-        '    `task`.`project_id`,\n' +
-        '    `task`.`create_time`,\n' +
-        '    `task`.`approved`,\n' +
-        '    `task`.`status_id`,\n' +
-        '    `task`.`assignee_id`,\n' +
-        '    `task`.`estimate`,\n' +
-        '    `task`.`log_work`,\n' +
-        '    `task`.`description`,\n' +
-        '    `task`.`reporter_id`,\n' +
-        '    `task`.`task_code`,\n' +
-        '    (select description from status where status_id = `task`.`status_id`) as status,\n' +
-        '    (select firstname from user where user_id = `task`.`reporter_id`) as reporter_firstname,\n' +
-        '    (select lastname from user where user_id = `task`.`reporter_id`) as reporter_lastname,\n' +
-        '    (select firstname from user where user_id = `task`.`assignee_id`) as assignee_firstname,\n' +
-        '    (select lastname from user where user_id = `task`.`assignee_id`) as assignee_lastname,\n' +
-        '    (select email from user where user_id = `task`.`assignee_id`) as assignee_email,\n' +
-        '    (select email from user where user_id = `task`.`reporter_id`) as reporter_email\n' +
-        'FROM `employee`.`task` where `project_id` = '+req.query.id;
+    if(req.query.id != undefined){
+        var sql = 'SELECT `task`.`task_id`,\n' +
+            '    `task`.`project_id`,\n' +
+            '    `task`.`create_time`,\n' +
+            '    `task`.`approved`,\n' +
+            '    `task`.`status_id`,\n' +
+            '    `task`.`assignee_id`,\n' +
+            '    `task`.`estimate`,\n' +
+            '    `task`.`log_work`,\n' +
+            '    `task`.`description`,\n' +
+            '    `task`.`reporter_id`,\n' +
+            '    `task`.`task_code`,\n' +
+            '    (select description from status where status_id = `task`.`status_id`) as status,\n' +
+            '    (select firstname from user where user_id = `task`.`reporter_id`) as reporter_firstname,\n' +
+            '    (select lastname from user where user_id = `task`.`reporter_id`) as reporter_lastname,\n' +
+            '    (select firstname from user where user_id = `task`.`assignee_id`) as assignee_firstname,\n' +
+            '    (select lastname from user where user_id = `task`.`assignee_id`) as assignee_lastname,\n' +
+            '    (select email from user where user_id = `task`.`assignee_id`) as assignee_email,\n' +
+            '    (select email from user where user_id = `task`.`reporter_id`) as reporter_email\n' +
+            'FROM `employee`.`task` where `project_id` = '+req.query.id;
 
 
-    if(req.query.assigneeflt != '' && req.query.assigneeflt != undefined){
-        sql += ' and `assignee_id` = (select user_id from user where email = \''+req.query.assigneeflt+'\') ';
-    }
-    if(req.query.reporterflt != '' && req.query.reporterflt != undefined){
-        sql += ' and `reporter_id` = (select user_id from user where email = \''+req.query.reporterflt+'\') ';
-    }
-    if(req.query.statusflt != '' && req.query.statusflt != undefined){
-        sql += ' and `status_id` = '+req.query.statusflt+' ';
-    }
-    if(req.query.approvedflt != '' && req.query.approvedflt != undefined){
-        sql += ' and `approved` = \''+req.query.approvedflt+'\' ';
-    }
-
-    var con = req.db.driver.db;
-    con.query(sql, function (err, rows) {
-        if(err){
-            console.log(err);
+        if(req.query.assigneeflt != '' && req.query.assigneeflt != undefined){
+            sql += ' and `assignee_id` = (select user_id from user where email = \''+req.query.assigneeflt+'\') ';
         }
-        else{
-            var projectName ;
-            req.models.project.find({project_id:req.query.id},function(err, row1,next){
-                if(err){
-                    console.log(err);
-                }
-                else{
-                    projectName = row1[0].project_name;
-                    data={title:'Tasks | '+req.session.firstname,fname:req.session.firstname,tasks:rows,project:row1,type:req.session.type};
-                    res.render('show_task',data);
-                }
-            });
-
-
+        if(req.query.reporterflt != '' && req.query.reporterflt != undefined){
+            sql += ' and `reporter_id` = (select user_id from user where email = \''+req.query.reporterflt+'\') ';
         }
-    });
+        if(req.query.statusflt != '' && req.query.statusflt != undefined){
+            sql += ' and `status_id` = '+req.query.statusflt+' ';
+        }
+        if(req.query.approvedflt != '' && req.query.approvedflt != undefined){
+            sql += ' and `approved` = \''+req.query.approvedflt+'\' ';
+        }
+
+        var con = req.db.driver.db;
+        con.query(sql, function (err, rows) {
+            if(err){
+                console.log(err);
+            }
+            else{
+                var projectName ;
+                req.models.project.find({project_id:req.query.id},function(err, row1,next){
+                    if(err){
+                        console.log(err);
+                    }
+                    else{
+                        projectName = row1[0].project_name;
+                        data={title:'Tasks | '+req.session.firstname,fname:req.session.firstname,tasks:rows,project:row1,type:req.session.type};
+                        res.render('show_task',data);
+                    }
+                });
+
+
+            }
+        });
+    }else{
+        var sql = 'SELECT `task`.`task_id`,\n' +
+            '    `task`.`project_id`,\n' +
+            '    `task`.`create_time`,\n' +
+            '    `task`.`approved`,\n' +
+            '    `task`.`status_id`,\n' +
+            '    `task`.`assignee_id`,\n' +
+            '    `task`.`estimate`,\n' +
+            '    `task`.`log_work`,\n' +
+            '    `task`.`description`,\n' +
+            '    `task`.`reporter_id`,\n' +
+            '    `task`.`task_code`,\n' +
+            '    `project`.`project_name`,\n' +
+            '    (select description from status where status_id = `task`.`status_id`) as status,\n' +
+            '    (select firstname from user where user_id = `task`.`reporter_id`) as reporter_firstname,\n' +
+            '    (select lastname from user where user_id = `task`.`reporter_id`) as reporter_lastname,\n' +
+            '    (select firstname from user where user_id = `task`.`assignee_id`) as assignee_firstname,\n' +
+            '    (select lastname from user where user_id = `task`.`assignee_id`) as assignee_lastname,\n' +
+            '    (select email from user where user_id = `task`.`assignee_id`) as assignee_email,\n' +
+            '    (select email from user where user_id = `task`.`reporter_id`) as reporter_email\n' +
+            'FROM `employee`.`task` join `employee`.`project` on `task`.`project_id` = `project`.`project_id`';
+
+        if((req.query.assigneeflt != '' && req.query.assigneeflt != undefined)
+            || (req.query.reporterflt != '' && req.query.reporterflt != undefined)
+            || (req.query.statusflt != '' && req.query.statusflt != undefined)
+            || (req.query.approvedflt != '' && req.query.approvedflt != undefined)){
+            sql += ' where '
+        }
+
+        if(req.query.assigneeflt != '' && req.query.assigneeflt != undefined){
+            sql += ' `assignee_id` = (select user_id from user where email = \''+req.query.assigneeflt+'\') and';
+        }
+        if(req.query.reporterflt != '' && req.query.reporterflt != undefined){
+            sql += ' `reporter_id` = (select user_id from user where email = \''+req.query.reporterflt+'\' ) and';
+        }
+        if(req.query.statusflt != '' && req.query.statusflt != undefined){
+            sql += ' `status_id` = '+req.query.statusflt+' and';
+        }
+        if(req.query.approvedflt != '' && req.query.approvedflt != undefined){
+            sql += ' `approved` = \''+req.query.approvedflt+'\' and';
+        }
+        if((req.query.assigneeflt != '' && req.query.assigneeflt != undefined)
+            || (req.query.reporterflt != '' && req.query.reporterflt != undefined)
+            || (req.query.statusflt != '' && req.query.statusflt != undefined)
+            || (req.query.approvedflt != '' && req.query.approvedflt != undefined)){
+            sql = sql.substring(0,sql.length-3);
+        }
+        sql += ' order by task_code;';
+        var con = req.db.driver.db;
+        con.query(sql, function (err, rows) {
+            if(err){
+                console.log(err);
+            }
+            else{
+
+                data={title:'Tasks | '+req.session.firstname,fname:req.session.firstname,tasks:rows,project:rows,type:req.session.type};
+                res.render('show_all_task',data);
+               /* var projectName ;
+                req.models.project.find({project_id:req.query.id},function(err, row1,next){
+                    if(err){
+                        console.log(err);
+                    }
+                    else{
+                        projectName = row1[0].project_name;
+                        data={title:'Tasks | '+req.session.firstname,fname:req.session.firstname,tasks:rows,project:row1,type:req.session.type};
+                        res.render('show_all_task',data);
+                    }
+                });*/
+
+
+            }
+        });
+    }
+
 
 
 };
@@ -210,7 +285,7 @@ module.exports.add_task = function(req, res){
                 console.log(err);
             }
             else{
-                var sql = 'select * from status;';
+                var sql = 'select * from employee.status;';
                 var con = req.db.driver.db;
                 con.query(sql, function (err, rows) {
                     if(err){
@@ -221,7 +296,9 @@ module.exports.add_task = function(req, res){
                         task_code:req.query.code+'-'+(parseInt(row1.length) + 1),
                         creator : req.session.firstname + ' ' + req.session.lastname,
                         creator_id : req.session.user_id,
-                        status : rows
+                        status : rows,
+                        type : req.session.type,
+                        user_id:req.session.user_id
                     };
                     res.render('add_task',data);
 
@@ -256,7 +333,8 @@ module.exports.save_task=function(req,res){
         description:input.description,
         reporter_id:parseInt(input.creator_id),
         task_code:input.taskcode,
-        create_time:parseInt(year+''+month+''+day)
+        create_time:parseInt(year+''+month+''+day),
+        close_time:0
     };
     if(input.action=="save"){
         req.models.task.create(data,function(err,rows){
@@ -265,9 +343,10 @@ module.exports.save_task=function(req,res){
             }
             else{
                 console.log(err)
+                date.setTime(date.getTime());
                 var dataAction={
                     task_id : parseInt(rows.task_id),
-                    update_time : date.getTime(),
+                    update_time : date,
                     status_id : parseInt(input.status),
                     user_id : parseInt(req.session.user_id),
                     description:'Create Task'
@@ -277,7 +356,8 @@ module.exports.save_task=function(req,res){
                         console.log(err);
                     }else{
                         var date2 = new Date();
-                        date2.setTime(dataAction.update_time);
+                        /*date2.setTime(dataAction.update_time);*/
+                        date2.setTime(date2.getTime())
                         console.log(date2.toString());
                     }
                 });
@@ -298,20 +378,36 @@ module.exports.save_task=function(req,res){
                 if(req.session.type == 1){
                     if(input.approved == 'D'){
                         sql+='`approved` = \'N\', ';
-                        sql+='`assignee_id` = 0, ';
+                        sql+='`assignee_id` = 0 ';
                     }else{
                         sql+='`approved` = \''+input.approved+'\', ';
-                        sql+='`assignee_id` = '+input.assignee_id+', ';
+                        sql+='`assignee_id` = '+input.assignee_id+' ';
                     }
 
                 }else{
-                    sql+='`assignee_id` = '+input.assignee_id+', ';
+                    sql+='`assignee_id` = '+input.assignee_id+' ';
                 }
-                sql += '`status_id` = '+input.status+', ' +
-                    '`estimate` = '+input.estimate+', ' +
-                    '`log_work` = \''+input.log+'\', ' +
-                    '`description` = \''+input.description+'\' ' +
-                    ' WHERE `task`.`task_id` = '+input.task_id;
+
+                if(row1[0].status_id != input.status){
+                    sql += ',`status_id` = '+input.status+' ';
+                    if(parseInt(input.status) == 5){
+                        sql += ',`close_time` = '+parseInt(year+''+month+''+day)+' ';
+                    }
+                }
+                if(input.estimate != undefined){
+                    if(row1[0].estimate != input.estimate){
+                        sql +=  ',`estimate` = '+input.estimate+' ';
+                    }
+                }
+
+                temp1 = row1[0].description;
+                temp2 = input.description;
+                if(temp1 != temp2){
+                    sql +=  ',`description` = \''+input.description+'\' ';
+                }
+
+                sql +=    ' WHERE `task`.`task_id` = '+input.task_id;
+                console.log(sql);
                 var con = req.db.driver.db;
                 con.query(sql, function (err, rows) {
                     if(err){
@@ -360,6 +456,76 @@ module.exports.save_task=function(req,res){
                                 }
                             });
                         }
+
+                        /*-------------------------------------------------*/
+                        date.setTime(date.getTime());
+                        var sqlInsAct = [];
+                        if(row1[0].assignee_id != input.assignee_id){
+                            sqlInsAct.push('INSERT INTO `employee`.`action`(`task_id`,`update_time`,`status_id`,`user_id`,`description`)\n' +
+                                'VALUES('+input.task_id+',\''+date.toString()+'\','+row1[0].status_id+','+req.session.user_id+',\'Change Assignee to '+input.realname+'\');'+'\n');
+                        }
+                        if(input.estimate != undefined){
+                            temp1 = parseInt(row1[0].estimate);
+                            temp2 = parseInt(input.estimate);
+                            if(temp1 != temp2){
+                                sqlInsAct.push('INSERT INTO `employee`.`action`(`task_id`,`update_time`,`status_id`,`user_id`,`description`)\n' +
+                                    'VALUES('+input.task_id+',\''+date.toString()+'\','+row1[0].status_id+','+req.session.user_id+',\'Change Estimate to '+input.estimate+'\');'+'\n');
+                            }
+                        }
+
+                        /*temp1 = row1[0].log_work;
+                        temp2 = input.log;
+                        if(temp1 != temp2){
+                            sqlInsAct.push('INSERT INTO `employee`.`action`(`task_id`,`update_time`,`status_id`,`user_id`,`description`)\n' +
+                                'VALUES('+input.task_id+',\''+date.toString()+'\','+row1[0].status_id+','+req.session.user_id+',\'Change Log Work to '+input.log+'\');'+'\n');
+                        }*/
+                        temp1 = row1[0].description;
+                        temp2 = input.description;
+                        if(temp1 != temp2){
+                            sqlInsAct.push('INSERT INTO `employee`.`action`(`task_id`,`update_time`,`status_id`,`user_id`,`description`)\n' +
+                                'VALUES('+input.task_id+',\''+date.toString()+'\','+row1[0].status_id+','+req.session.user_id+',\'Change Description to '+input.description+'\');'+'\n');
+                        }
+                        if(req.session.type == 1){
+                            temp1 = row1[0].approved;
+                            temp2 = input.approved;
+                            if(temp1 != temp2){
+                                sqlInsAct.push('INSERT INTO `employee`.`action`(`task_id`,`update_time`,`status_id`,`user_id`,`description`)\n' +
+                                    'VALUES('+input.task_id+',\''+date.toString()+'\','+row1[0].status_id+','+req.session.user_id+',\'Change Approved to '+input.approved+'\');'+'\n');
+                            }
+                        }
+                        if(row1[0].status_id != input.status){
+                            sqlInsAct.push('INSERT INTO `employee`.`action`(`task_id`,`update_time`,`status_id`,`user_id`,`description`)\n' +
+                                'VALUES('+input.task_id+',\''+date.toString()+'\','+row1[0].status_id+','+req.session.user_id+',\'Change Status to '+input.sttdesc+'\');'+'\n');
+                        }
+
+                        for (var i = 0; i < sqlInsAct.length; i++) {
+                            con.query(sqlInsAct[i], function (err, row1s) {
+                                if(err){
+                                    console.log(err + sqlInsAct);
+                                }
+                                else {
+                                    /* var sql = 'UPDATE `employee`.`task` ' +
+                                         'SET ' ;
+                                     if(req.session.type == 1){
+                                         sql+='`approved` = \''+input.approved+'\', ';
+                                     }
+                                     sql += '`status_id` = '+input.status+', ' +
+                                         '`assignee_id` = '+input.assignee_id+', ' +
+                                         '`estimate` = '+input.estimate+', ' +
+                                         '`log_work` = \''+input.log+'\', ' +
+                                         '`description` = \''+input.description+'\' ' +
+                                         ' WHERE `task`.`task_id` = '+input.task_id;
+                                     var con = req.db.driver.db;
+                                     con.query(sql, function (err, rows) {
+                                         if(err){
+                                             console.log(err);
+                                         }
+
+                                     });*/
+                                }
+                            });
+                        }
+
                     }
                 });
 
@@ -436,14 +602,19 @@ module.exports.edit_task=function(req,res){
         '    `task`.`description`,\n' +
         '    `task`.`reporter_id`,\n' +
         '    `task`.`task_code`,\n' +
+        '    `action`.`update_time`,\n' +
+        '    `action`.`description` as action_description,\n' +
         '    (select description from status where status_id = `task`.`status_id`) as status,\n' +
         '    (select firstname from user where user_id = `task`.`reporter_id`) as reporter_firstname,\n' +
         '    (select lastname from user where user_id = `task`.`reporter_id`) as reporter_lastname,\n' +
         '    (select firstname from user where user_id = `task`.`assignee_id`) as assignee_firstname,\n' +
         '    (select lastname from user where user_id = `task`.`assignee_id`) as assignee_lastname,\n' +
         '    (select email from user where user_id = `task`.`assignee_id`) as assignee_email,\n' +
-        '    (select email from user where user_id = `task`.`reporter_id`) as reporter_email\n' +
-        'FROM `employee`.`task` where `task`.`task_id` ='+ req.query.id + ';';
+        '    (select email from user where user_id = `task`.`reporter_id`) as reporter_email,\n' +
+        '    (select firstname from user where user_id = `action`.`user_id`) as userfirstname,\n' +
+        '    (select lastname from user where user_id = `action`.`user_id`) as userlastname,\n' +
+        '    (select email from user where user_id = `action`.`user_id`) as useremail \n' +
+        'FROM `employee`.`task` join `employee`.`action` on `task`.`task_id` = `action`.`task_id` where `task`.`task_id` ='+ req.query.id + ';';
     var con = req.db.driver.db;
     con.query(sql, function (err, rows) {
         if(err){

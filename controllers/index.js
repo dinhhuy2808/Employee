@@ -2,12 +2,13 @@ var dateFormat = require('dateformat');
 module.exports.home = function(req, res){
 	//delete req.session;
 	if(typeof req.session.user_id!='undefined'){
-
-        var sql = 'select * ,\n' +
+        var sql = '';
+         sql += 'select * ,\n' +
             '(select firstname from user where user_id = pro.customer_id) as firstname,\n' +
             '(select lastname from user where user_id = pro.customer_id) as lastname,\n' +
-            '(select email from user where user_id = pro.customer_id) as email\n' +
-            ' from project pro ';
+            '(select email from user where user_id = pro.customer_id) as email,\n' +
+            '(select email from user where user_id = '+req.session.user_id+') as assigneeemail\n' +
+            ' from employee.project pro ';
         if( (req.query.email != undefined &&  req.query.email != '')
 			||  (req.query.name != undefined &&  req.query.name != '')){
             sql += 'join user u on pro.customer_id = u.user_id where  ';
