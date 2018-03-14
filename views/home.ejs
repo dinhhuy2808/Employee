@@ -50,7 +50,7 @@
             <div class="container">
                 <div class="row">
                     <div class="col-md-3">
-                        <a class="logo" href="index.html">
+                        <a class="logo" href="/">
                             <img src="img/ACD_Final_Logo_2.png" alt="Image Alternative text" title="Image Title" />
                         </a>
                     </div>
@@ -96,9 +96,9 @@
         <!--<div class="container">
             <div class="nav">
                 <ul class="slimmenu" id="slimmenu">
-                    <li><a href="index.html">Home</a>
+                    <li><a href="/">Home</a>
                         <ul>
-                            <li><a href="index.html">Default</a>
+                            <li><a href="/">Default</a>
                             </li>
                             <li><a href="index-1.html">Layout 1</a>
                             </li>
@@ -437,7 +437,7 @@
 
     <div class="container">
         <!--<ul class="breadcrumb">
-            <li><a href="index.html">Home</a>
+            <li><a href="/">Home</a>
             </li>
             <li><a href="#">United States</a>
             </li>
@@ -521,8 +521,7 @@
                                             <ul>
                                                 <li><a href="export-excel/project">Project Detail</a>
                                                 </li>
-                                                <li><a href="export-excel/user">User Detail</a>
-                                                </li>
+
                                                 <li>
                                                     <a data-toggle="modal" data-target="#myModal" id = 'payment'>Payment</a>
 
@@ -597,13 +596,12 @@
                                         <h5 class="booking-item-title">Task</h5>
                                     </div>
                                     <div class="col-md-2">
-                                        <h5 class="booking-item-title">From(d/m/y)</h5>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <h5 class="booking-item-title">To(d/m/y)</h5>
+                                        <h5 class="booking-item-title">Status</h5>
                                     </div>
 
                                 </div>
+
+
                                 <div class="row">
                                     <%if(data.type == 1){%>
                                         <div class="col-md-3">
@@ -620,13 +618,34 @@
                                         <input class="typeahead-task form-control" name = 'taskflt' id = 'taskflt' value=""  type="text" />
                                     </div>
                                     <div class="col-md-2">
-                                        <input class="typeahead form-control" name = 'fromflt' id = 'fromflt' value=""  type="text" />
+                                        <select id = "statusflt" name = "statusflt">
+                                            <option value = '1' selected>Un-paid</option>
+                                            <option value = '2'>Paid</option>
+
+                                        </select>
                                     </div>
-                                    <div class="col-md-2">
-                                        <input class="typeahead form-control" name = 'toflt' id = 'toflt' value=""  type="text" />
+                                </div>
+
+
+
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <h5 class="booking-item-title">From</h5>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <h5 class="booking-item-title">To</h5>
+                                        </div>
                                     </div>
 
-                                </div>
+
+                                <div class="row">
+                                     <div class="col-md-3">
+                                         <input class=" form-control" name = 'fromflt' id = 'fromflt' value=""  type="date" />
+                                     </div>
+                                     <div class="col-md-3">
+                                         <input class=" form-control" name = 'toflt' id = 'toflt' value=""  type="date" />
+                                     </div>
+                                 </div>
                                 <div class="row">
                                     <div class="col-md-2">
                                         <button class="btn btn-primary" id = 'search' name = 'search' >Apply</button>
@@ -678,7 +697,8 @@
                             var taskVal = document.getElementById('taskflt').value;
                             var fromVal = document.getElementById('fromflt').value;
                             var toVal = document.getElementById('toflt').value;
-                            window.location.href="/export-excel/count?assigneeflt=" + assigneeVal+"&projectflt="+projectVal+"&taskflt="+taskVal+"&fromflt="+fromVal+"&toflt="+toVal;
+                            var statusVal = document.getElementById('statusflt').value;
+                            window.location.href="/export-excel/count?assigneeflt=" + assigneeVal+"&projectflt="+projectVal+"&taskflt="+taskVal+"&fromflt="+fromVal+"&toflt="+toVal+"&statusflt="+statusVal;
 
                         });
 
@@ -703,11 +723,12 @@
                             var taskVal = document.getElementById('taskflt').value;
                             var fromVal = document.getElementById('fromflt').value;
                             var toVal = document.getElementById('toflt').value;
+                            var statusVal = document.getElementById('statusflt').value;
                             $('#newRow').remove();
                             $.ajax({
                                 type: "POST",
                                 url: "./ajax/count",
-                                data: "mode=checkEmailAddProject&assigneeflt=" + assigneeVal+"&projectflt="+projectVal+"&taskflt="+taskVal+"&fromflt="+fromVal+"&toflt="+toVal,
+                                data: "mode=checkEmailAddProject&assigneeflt=" + assigneeVal+"&projectflt="+projectVal+"&taskflt="+taskVal+"&fromflt="+fromVal+"&toflt="+toVal+"&statusflt="+statusVal,
                                 cache: false,
                                 success: function (msg) {
                                     //alert(msg);

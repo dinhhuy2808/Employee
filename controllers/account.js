@@ -95,25 +95,41 @@ module.exports.show_account = function(req, res){
             var sql = 'select * from employee.user ';
             if( (req.query.fname != undefined &&  req.query.fname != '')
                 ||  (req.query.lname != undefined &&  req.query.lname != '')
-                ||  (req.query.email != undefined &&  req.query.email != '')){
+                ||  (req.query.email != undefined &&  req.query.email != '')
+                ||  (req.query.type != undefined &&  req.query.type != '')){
                 sql += ' where  ';
             }
             if(req.query.fname != '' && req.query.fname != undefined){
-                sql += 'firstname = \''+req.query.fname+'\'';
+                sql += ' firstname = \''+req.query.fname+'\' and';
             }
             if(req.query.lname != '' && req.query.lname != undefined){
-                sql += 'lastname = \''+req.query.lname+'\'';
+                sql += ' lastname = \''+req.query.lname+'\' and';
             }
             if(req.query.email != '' && req.query.email != undefined){
-                sql += 'email = \''+req.query.email+'\'';
+                sql += ' email = \''+req.query.email+'\' and';
             }
+            if(req.query.type != '0' && req.query.type != undefined){
+                sql += ' type_id = '+req.query.type+' and';
+            }
+
+            if( (req.query.fname != undefined &&  req.query.fname != '')
+                ||  (req.query.lname != undefined &&  req.query.lname != '')
+                ||  (req.query.email != undefined &&  req.query.email != '')
+                ||  (req.query.type != undefined &&  req.query.type != '0')){
+                sql = sql.substring(0,sql.length-3);
+            }
+            console.log(sql);
             var con = req.db.driver.db;
             con.query(sql, function (err, rows) {
                 if(err){
                     console.log(err);
                     res.redirect('/maintenance')
                 }else{
-                    data={title:req.session.firstname+' | home',fname:req.session.firstname,users:rows,dateFormat:dateFormat,pic:req.session.pic,type:req.session.type};
+                    data={title:req.session.firstname+' | home',fname:req.session.firstname,users:rows,dateFormat:dateFormat,pic:req.session.pic,type:req.session.type,
+                        fnameflt:req.query.fname,
+                        lnameflt:req.query.lname,
+                        emailflt:req.query.email,
+                        typeflt:req.query.type,};
                     res.render('accounts',data);
 				}
 

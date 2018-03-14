@@ -143,8 +143,13 @@ exports.count=function(req,res){
         '(select salary from user u where u.user_id = t.assignee_id) as salary,\n' +
         '(select description from status s where s.status_id = t.status_id) as status,\n' +
         '(select code from project p where p.project_id = t.project_id) as project\n' +
-        'from employee.task t where status_id = 5 ';
-
+        'from employee.task t where status_id =  ';
+    console.log(input);
+    if(parseInt(input.statusflt) == 1){
+        sql += '5 ';
+    }else{
+        sql += '6 ';
+    }
     if(input.assigneeflt != '' && input.assigneeflt != undefined){
         sql += 'and `assignee_id` = (select user_id from user where email = \''+input.assigneeflt+'\') ';
     }
@@ -155,12 +160,13 @@ exports.count=function(req,res){
         sql += 'and `task_code` = \''+input.taskflt+'\' ';
     }
     if(input.fromflt != '' && input.fromflt != undefined){
-        var from = input.fromflt.split("/");
+        console.log(input.fromflt);
+        var from = input.fromflt.split("-");
         var newDOB = from[2]+from[1]+from[0];
         sql += 'and `close_time` >= '+newDOB+' ';
     }
     if(input.toflt != '' && input.toflt != undefined){
-        var to = input.toflt.split("/");
+        var to = input.toflt.split("-");
         var newDOB = from[2]+from[1]+from[0];
         sql += 'and `close_time` <= '+newDOB+' ';
     }
@@ -184,7 +190,6 @@ exports.count=function(req,res){
 
                 }
                 data={status:'exist',code:'300',total: total , detail:rows};
-                console.log(data)
             }
             res.json(data);
 

@@ -123,7 +123,32 @@ module.exports.export_excel_user=function(req,res){
 
     var sql = 'select *,\n' +
         '(select t.description from type t where t.type_id = u.type_id) as type\n' +
-        'from employee.user u;';
+        'from employee.user u ';
+    if( (req.query.fname != undefined &&  req.query.fname != '')
+        ||  (req.query.lname != undefined &&  req.query.lname != '')
+        ||  (req.query.email != undefined &&  req.query.email != '')
+        ||  (req.query.type != undefined &&  req.query.type != '0')){
+        sql += ' where  ';
+    }
+    if(req.query.fname != '' && req.query.fname != undefined){
+        sql += ' firstname = \''+req.query.fname+'\' and';
+    }
+    if(req.query.lname != '' && req.query.lname != undefined){
+        sql += ' lastname = \''+req.query.lname+'\' and';
+    }
+    if(req.query.email != '' && req.query.email != undefined){
+        sql += ' email = \''+req.query.email+'\' and';
+    }
+    if(req.query.type != '0' && req.query.type != undefined ){
+        sql += ' type_id = '+req.query.type+' and';
+    }
+    if( (req.query.fname != undefined &&  req.query.fname != '')
+        ||  (req.query.lname != undefined &&  req.query.lname != '')
+        ||  (req.query.email != undefined &&  req.query.email != '')
+        ||  (req.query.type != undefined &&  req.query.type != '0' )){
+        sql = sql.substring(0,sql.length-3);
+    }
+    console.log(sql);
     var con = req.db.driver.db;
     con.query(sql, function (err, rows) {
         if(err){
@@ -208,8 +233,12 @@ module.exports.export_excel_count=function(req,res){
         '(select salary from user u where u.user_id = t.assignee_id) as salary,\n' +
         '(select description from status s where s.status_id = t.status_id) as status,\n' +
         '(select code from project p where p.project_id = t.project_id) as project\n' +
-        'from employee.task t where status_id = 5 ';
-
+        'from employee.task t where status_id =  ';
+        if(parseInt(req.query.statusflt) == 1){
+            sql += '5 ';
+        }else{
+            sql += '6 ';
+        }
     if(req.query.assigneeflt != '' && req.query.assigneeflt != undefined){
         sql += 'and `assignee_id` = (select user_id from user where email = \''+req.query.assigneeflt+'\') ';
     }
