@@ -130,7 +130,8 @@ module.exports.show_account = function(req, res){
                         fnameflt:req.query.fname,
                         lnameflt:req.query.lname,
                         emailflt:req.query.email,
-                        typeflt:req.query.type,};
+                        typeflt:req.query.type,
+			emailheader:req.session.email};
                     res.render('accounts',data);
 				}
 

@@ -1,4 +1,4 @@
-var nodemailer = require('nodemailer');
+﻿var nodemailer = require('nodemailer');
 //add project
 module.exports.add_project = function(req, res){
 	if(typeof req.session.user_id!='undefined'){
@@ -188,7 +188,7 @@ module.exports.show_task=function(req,res){
                     }
                     else{
                         projectName = row1[0].project_name;
-                        data={title:'Tasks | '+req.session.firstname,fname:req.session.firstname,tasks:rows,project:row1,type:req.session.type};
+                        data={title:'Tasks | '+req.session.firstname,fname:req.session.firstname,tasks:rows,project:row1,type:req.session.type,emailheader:req.session.email};
                         res.render('show_task',data);
                     }
                 });
