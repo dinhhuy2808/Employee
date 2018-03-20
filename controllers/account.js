@@ -131,7 +131,7 @@ module.exports.show_account = function(req, res){
                         lnameflt:req.query.lname,
                         emailflt:req.query.email,
                         typeflt:req.query.type,
-			emailheader:req.session.email};
+			emailheader:req.session.email,};
                     res.render('accounts',data);
 				}
 
