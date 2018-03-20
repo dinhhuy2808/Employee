@@ -116,10 +116,6 @@
                         <input class="form-control" type="text" name="lname" required>
                     </div>
 
-                    <div class="form-group form-group-icon-left"><i class="fa fa-user input-icon input-icon-show"></i>
-                        <label>User</label>
-                        <input class="form-control" type="text" name="username" id="username" required>
-                    </div>
 
                     <div class="form-group form-group-icon-left"><i class="fa fa-user input-icon input-icon-show"></i>
                         <label>Email</label>
@@ -156,7 +152,7 @@
                         <input class="form-control" type="text" name="addr" id="addr" required>
                     </div>
 
-                    <div class="form-group form-group-icon-left"><i class="fa fa-user input-icon input-icon-show"></i>
+                    <div class="form-group form-group-icon-left" id = "salaryRow"><i class="fa fa-user input-icon input-icon-show"></i>
                         <label>Basic Salary ( per hour)</label>
                         <input class="form-control" type="text" name="salary" id="salary" required>
                     </div>
@@ -172,12 +168,13 @@
                         </select>
                     </div>
 
-                    <div class="form-group form-group-icon-left"><i class="fa fa-user input-icon input-icon-show"></i>
+                    <div class="form-group form-group-icon-left" id = "passwordRow"><i class="fa fa-user input-icon input-icon-show"></i>
                         <label>Password</label>
-                        <input class="form-control" type="password" name="password" required>
-                        </br>
-                        <input class="btn btn-primary" type="submit" value="sign up" >
+                        <input class="form-control" type="password" name="password" id="password" required>
+                       
                     </div>
+					 </br>
+                        <input class="btn btn-primary" type="submit" value="sign up" >
 
                 </form>
 
@@ -338,6 +335,19 @@
                 return false;
             }
         });
+    });
+	$(document).ready(function () {
+        $('#type').change(function () {
+           var typeVal = document.getElementById('type').value;
+		   if(typeVal == '3'){
+				document.getElementById("password").value = '0';
+				document.getElementById("passwordRow").style.display = "none";
+				
+				document.getElementById("salary").value = '0';
+				document.getElementById("salaryRow").style.display = "none";
+		   }
+        });
+       
     });
 </script>
 </html>

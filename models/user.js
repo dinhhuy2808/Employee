@@ -1,7 +1,6 @@
 module.exports = function (orm, db) {
     db.define('user', {
         user_id: {type: 'number',key : true, autoIncrement: true,},
-        username: {type: 'text'},
         email: {type: 'text'},
         dob: {type: 'number'},
         status: {type: 'number'},

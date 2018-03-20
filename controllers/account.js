@@ -17,7 +17,6 @@ module.exports.signup=function(req,res){
 	var newDOB = birth[2]+birth[0]+birth[1];
 		passwd=md5(input.password);
 		var dataUser = {
-			username:input.username,
             email   : input.email,
             dob:input.dob,
             phone    : input.phone,
@@ -71,6 +70,7 @@ module.exports.login=function(req,res){
             req.session.lastname=rows[0].lastname;
 			req.session.user_id=rows[0].user_id;
             req.session.type=rows[0].type_id;
+            req.session.email=rows[0].email;
 			console.log(rows);
 		}
 		res.redirect('/');
@@ -90,7 +90,8 @@ module.exports.register=function(req,res){
 
 module.exports.show_account = function(req, res){
         //delete req.session;
-        if(typeof req.session.user_id!='undefined'){
+        if(typeof req.session.user_id!='undefined'
+            &&  (req.session.type == 1)){
 
             var sql = 'select * from employee.user ';
             if( (req.query.fname != undefined &&  req.query.fname != '')
@@ -136,6 +137,8 @@ module.exports.show_account = function(req, res){
 
             });
 
+        }else{
+            res.redirect('/')
         }
 
     };
@@ -171,7 +174,6 @@ module.exports.save_account = function(req, res){
                 var dt_join=Math.round(+new Date()/1000);
                 var birth = input.dob.split("/");
                 var newDOB = birth[2]+birth[1]+birth[0];
-                rows.username=input.username;
                 rows.email   = input.email;
                 rows.phone    = input.phone;
                 rows.firstname    = input.fname;
@@ -186,7 +188,12 @@ module.exports.save_account = function(req, res){
                     console.log('saved');
                 });
             }
-             res.redirect('/maintenance');
+            if(req.session.type == 1){
+                res.redirect('/maintenance');
+            }else{
+                res.redirect('/');
+            }
+
         });
 
 

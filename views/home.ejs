@@ -66,7 +66,7 @@
                         <div class="top-user-area clearfix">
                             <ul class="top-user-area-list list list-horizontal list-border">
                                 <li class="top-user-area-avatar">
-                                    <a href="user-profile.html">
+                                    <a href="/edit-account?email=<%=data.assigneeemail%>">
                                         <img class="origin round" src="img/40x40.png" alt="Image Alternative text" title="AMaze" />Hi, <%= data.fname %></a>
                                 </li>
                                 <li><a href="/logout">Sign Out</a>
@@ -549,14 +549,17 @@
                             <a class="btn btn-primary" href="add-project">Account</a>
                         </td>
                         <td>
-                            <a class="btn btn-primary" href="/show-task?assigneeflt=<%=data.project[1].assigneeemail%>">Tasks</a>
+                            <% if (data.project.length > 0){%>
+                                <a class="btn btn-primary" href="/show-task?assigneeflt=<%=data.assigneeemail%>">Tasks</a>
+                            <%}%>
+
                         </td>
                         <td>
                             <div class="nav">
                                 <ul class="slimmenu" id="slimmenu">
                                     <li><a href="/">Action</a>
                                         <ul>
-                                            <li><a href="/edit-account?email=<%=data.project[1].assigneeemail%>">User Detail</a>
+                                            <li><a href="/edit-account?email=<%=data.assigneeemail%>">User Detail</a>
                                             </li>
                                             <li>
                                                 <a data-toggle="modal" data-target="#myModal" id = 'payment'>Payment</a>
@@ -608,7 +611,7 @@
                                             <input class="typeahead form-control" name = 'assigneeflt' id = 'assigneeflt' value=""  type="text" />
                                         </div>
                                     <%} else {%>
-                                        <input class="typeahead form-control" name = 'assigneeflt' id = 'assigneeflt' value="<%=data.project[1].assigneeemail%>"  type="text" style="display: none"/>
+                                        <input class="typeahead form-control" name = 'assigneeflt' id = 'assigneeflt' value="<%=data.assigneeemail%>"  type="text" style="display: none"/>
                                     <%}%>
 
                                     <div class="col-md-3">
@@ -828,9 +831,12 @@
                                            <td>
                                                <a class="btn btn-primary" href="/edit-project?id=<%= project[i].project_id%>">Edit</a>
                                            </td>
+                                           <%if(data.type == 1){%>
                                            <td>
                                                <a class="btn btn-primary"  href="/delete-project/<%= project[i].project_id %>">Delete</a>
                                            </td>
+
+                                           <%}%>
                                        </tr>
 
                                    </table>

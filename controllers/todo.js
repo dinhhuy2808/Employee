@@ -251,7 +251,7 @@ module.exports.show_task=function(req,res){
             }
             else{
 
-                data={title:'Tasks | '+req.session.firstname,fname:req.session.firstname,tasks:rows,project:rows,type:req.session.type};
+                data={title:'Tasks | '+req.session.firstname,fname:req.session.firstname,tasks:rows,project:rows,type:req.session.type,assignee_email:req.session.email};
                 res.render('show_all_task',data);
                /* var projectName ;
                 req.models.project.find({project_id:req.query.id},function(err, row1,next){

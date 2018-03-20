@@ -6,8 +6,7 @@ module.exports.home = function(req, res){
          sql += 'select * ,\n' +
             '(select firstname from user where user_id = pro.customer_id) as firstname,\n' +
             '(select lastname from user where user_id = pro.customer_id) as lastname,\n' +
-            '(select email from user where user_id = pro.customer_id) as email,\n' +
-            '(select email from user where user_id = '+req.session.user_id+') as assigneeemail\n' +
+            '(select email from user where user_id = pro.customer_id) as email\n' +
             ' from employee.project pro ';
         if( (req.query.email != undefined &&  req.query.email != '')
 			||  (req.query.name != undefined &&  req.query.name != '')){
@@ -24,7 +23,7 @@ module.exports.home = function(req, res){
             if(err){
                 console.log(err);
             }
-            data={title:req.session.firstname+' | home',fname:req.session.firstname,project:rows,dateFormat:dateFormat,pic:req.session.pic,type:req.session.type};
+            data={title:req.session.firstname+' | home',fname:req.session.firstname,project:rows,assigneeemail: req.session.email,dateFormat:dateFormat,pic:req.session.pic,type:req.session.type};
             res.render('home',data);
 
         });
