@@ -97,7 +97,17 @@ module.exports.delete_project=function(req,res){
             console.log(err);
         }
         else{
+		var sql = 'delete from task where project_id  = '+req.params.id+';'
+       		 var con = req.db.driver.db;
+        	con.query(sql, function (err, rows) {
+          	  if(err){
+           	     console.log(err);
+          	  }
+           	res.redirect('/');
+        	});
         }
+
+	
         res.redirect('/');
     });
 };
