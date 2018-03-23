@@ -142,13 +142,16 @@
             <div class="booking-item-dates-change mb30">
             <div class="row">
                 <input class="typeahead form-control" name = 'id' id = 'id' value="<%=project[0].project_id%>"  type="text" style="display: none"/>
-                    <div class="col-md-3">
-                        <div class="form-group form-group-icon-left">
-                            <label>Assignee :</label>
-                            <input class="typeahead form-control" name = 'assigneeflt' id = 'assigneeflt' value=""  type="text" />
-                        </div>
+                    <%if(data.type == 1){%>
+                        <div class="col-md-3">
+                            <div class="form-group form-group-icon-left">
+                                <label>Assignee :</label>
+                                <input class="typeahead form-control" name = 'assigneeflt' id = 'assigneeflt' value=""  type="text" />
+                            </div>
 
-                    </div>
+                        </div>
+                    <%}%>
+
                     <div class="col-md-3">
                         <div class="form-group form-group-icon-left">
                             <label>Reporter : </label>

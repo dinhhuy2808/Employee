@@ -145,16 +145,30 @@ module.exports.show_account = function(req, res){
     };
 
 module.exports.edit_account = function(req, res){
-		req.models.user.find({email:req.query.email},function(err,rows){
-			if(err){
-				console.log(err);
-			}
-			else{
+    if(req.session.type == 1){
+        req.models.user.find({email:req.query.email},function(err,rows){
+            if(err){
+                console.log(err);
+            }
+            else{
                 data={title:'Edit Account | '+req.session.firstname,fname:req.session.firstname,user:rows};
                 res.render('edit_account',data);
 
-			}
-		});
+            }
+        });
+    }else{
+        req.models.user.find({email:res.session.email},function(err,rows){
+            if(err){
+                console.log(err);
+            }
+            else{
+                data={title:'Edit Account | '+req.session.firstname,fname:req.session.firstname,user:rows};
+                res.render('edit_account',data);
+
+            }
+        });
+    }
+
 
     };
 module.exports.save_account = function(req, res){

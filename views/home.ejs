@@ -546,9 +546,6 @@
                 <table>
                     <tr>
                         <td>
-                            <a class="btn btn-primary" href="add-project">Account</a>
-                        </td>
-                        <td>
                             <% if (data.project.length > 0){%>
                                 <a class="btn btn-primary" href="/show-task?assigneeflt=<%=data.assigneeemail%>">Tasks</a>
                             <%}%>
@@ -828,10 +825,11 @@
                                <div class="col-md-3">
                                    <table>
                                        <tr>
+                                           <%if(data.type == 1){%>
                                            <td>
                                                <a class="btn btn-primary" href="/edit-project?id=<%= project[i].project_id%>">Edit</a>
                                            </td>
-                                           <%if(data.type == 1){%>
+
                                            <td>
                                                <a class="btn btn-primary"  href="/delete-project/<%= project[i].project_id %>">Delete</a>
                                            </td>
