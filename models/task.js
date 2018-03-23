@@ -11,6 +11,8 @@ module.exports = function (orm, db) {
         description: {type: 'text'},
         reporter_id: {type: 'number'},
         task_code: {type: 'text'},
-        close_time: {type: 'number'}
+        close_time: {type: 'number'},
+        ref_id: {type: 'number'},
+        activity_id: {type: 'number'}
     });
 };

@@ -364,16 +364,42 @@ module.exports.add_task = function(req, res){
                     if(err){
                         console.log(err);
                     }
-                    data={title:'Add task | '+req.session.firstname,
-                        fname:req.session.firstname,
-                        task_code:req.query.code+'-'+(parseInt(row1.length) + 1),
-                        creator : req.session.firstname + ' ' + req.session.lastname,
-                        creator_id : req.session.user_id,
-                        status : rows,
-                        type : req.session.type,
-                        user_id:req.session.user_id
-                    };
-                    res.render('add_task',data);
+                    else{
+                        sql = 'select * from employee.refname;'
+
+                        con.query(sql, function (err, row1s) {
+                            if(err){
+                                console.log(err);
+                            }
+                            else{
+
+                                sql = 'select * from employee.activity;';
+                                con.query(sql, function (err, row2s) {
+                                    if(err){
+                                        console.log(err);
+                                    }
+                                    else{
+                                        data={title:'Add task | '+req.session.firstname,
+                                            fname:req.session.firstname,
+                                            task_code:req.query.code+'-'+(parseInt(row1.length) + 1),
+                                            creator : req.session.firstname + ' ' + req.session.lastname,
+                                            creator_id : req.session.user_id,
+                                            status : rows,
+                                            type : req.session.type,
+                                            user_id:req.session.user_id,
+                                            refname : row1s,
+                                            activities : row2s,
+                                        };
+                                        res.render('add_task',data);
+                                    }
+                                });
+                            }
+
+                        });
+                    }
+
+
+
 
                 });
 
@@ -407,8 +433,11 @@ module.exports.save_task=function(req,res){
         reporter_id:parseInt(input.creator_id),
         task_code:input.taskcode,
         create_time:parseInt(year+''+month+''+day),
-        close_time:0
+        close_time:0,
+        ref_id : parseInt(input.refname),
+        activity_id : parseInt(input.activity)
     };
+    console.log(data);
     if(input.action=="save"){
         req.models.task.create(data,function(err,rows){
             if(err){
@@ -479,6 +508,17 @@ module.exports.save_task=function(req,res){
                     temp2 = input.description;
                     if(temp1 != temp2){
                         sql +=  ',`description` = \''+input.description+'\' ';
+                    }
+
+                    if(input.refname != undefined){
+                        if(row1[0].ref_id != input.refname){
+                            sql +=  ',`refname` = '+input.refname+' ';
+                        }
+                    }
+                    if(input.activity != undefined){
+                        if(row1[0].activity_id != input.activity){
+                            sql +=  ',`activity_id` = '+input.activity+' ';
+                        }
                     }
 
                     sql +=    ' WHERE `task`.`task_id` = '+input.task_id;
@@ -697,6 +737,17 @@ module.exports.save_task=function(req,res){
 
                         temp1 = row1[0].description;
                         temp2 = input.description;
+
+                        if(input.refname != undefined){
+                            if(row1[0].ref_id != input.refname){
+                                sql +=  ',`refname` = '+input.refname+' ';
+                            }
+                        }
+                        if(input.activity != undefined){
+                            if(row1[0].activity_id != input.activity){
+                                sql +=  ',`activity_id` = '+input.activity+' ';
+                            }
+                        }
                         if(temp1 != temp2){
                             sql +=  ',`description` = \''+input.description+'\' ';
                         }

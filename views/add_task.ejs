@@ -204,29 +204,72 @@
                         <label>Work Log</label>
                         <input class="form-control" type="text" name="log" id="log" value='' required >
                     </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group form-group-icon-left"><i class="fa fa-user input-icon input-icon-show"></i>
+                                <label>Status</label>
+                                <select name="status" id="status">
+                                    <% for (var i = 0;i<data.status.length;i++){%>
+                                    <%if(i == 0){%>
+                                    <option value="<%=data.status[i].status_id%>" selected><%=data.status[i].description%></option>
+                                    <%} else {%>
+                                    <option value="<%=data.status[i].status_id%>"><%=data.status[i].description%></option>
+                                    <%}%>
+                                    <%}%>
 
-                    <div class="form-group form-group-icon-left"><i class="fa fa-user input-icon input-icon-show"></i>
-                        <label>Status</label>
-                        <select name="status" id="status">
-                            <% for (var i = 0;i<data.status.length;i++){%>
-                            <%if(i == 0){%>
-                            <option value="<%=data.status[i].status_id%>" selected><%=data.status[i].description%></option>
-                            <%} else {%>
-                            <option value="<%=data.status[i].status_id%>"><%=data.status[i].description%></option>
-                            <%}%>
-                            <%}%>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-1">
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group form-group-icon-left"><i class="fa fa-user input-icon input-icon-show"></i>
+                                <label>Approved</label>
 
-                        </select>
+                                <select name="approved" id="approved">
+                                    <option value="N" selected>No</option>
+                                    <option value="Y">Yes</option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
 
-                    <div class="form-group form-group-icon-left"><i class="fa fa-user input-icon input-icon-show"></i>
-                        <label>Approved</label>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group form-group-icon-left"><i class="fa fa-user input-icon input-icon-show"></i>
+                                <label>Reff Name</label>
+                                <select name="refname" id="refname">
+                                    <% for (var i = 0;i<data.refname.length;i++){%>
+                                    <%if(i == 0){%>
+                                    <option value="<%=data.refname[i].ref_id%>" selected><%=data.refname[i].description%></option>
+                                    <%} else {%>
+                                    <option value="<%=data.refname[i].ref_id%>"><%=data.refname[i].description%></option>
+                                    <%}%>
+                                    <%}%>
 
-                        <select name="approved" id="approved">
-                            <option value="N" selected>No</option>
-                            <option value="Y">Yes</option>
-                        </select>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-1">
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group form-group-icon-left"><i class="fa fa-user input-icon input-icon-show"></i>
+                                <label>Activity</label>
+
+                                <select name="activity" id="activity">
+                                    <% for (var i = 0;i<data.activities.length;i++){%>
+                                    <%if(i == 0){%>
+                                    <option value="<%=data.activities[i].activity_id%>" selected><%=data.activities[i].description%></option>
+                                    <%} else {%>
+                                    <option value="<%=data.activities[i].activity_id%>"><%=data.activities[i].description%></option>
+                                    <%}%>
+                                    <%}%>
+
+                                </select>
+                            </div>
+                        </div>
                     </div>
+
 
                     <div class="form-group form-group-icon-left"><i class="fa fa-user input-icon input-icon-show"></i>
                         <label>Creator</label>

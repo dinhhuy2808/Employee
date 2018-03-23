@@ -235,7 +235,7 @@
 
 
                     <li>
-                        <%if((data.emailheader.trim() == tasks[i].assignee_email) || (tasks[i].assignee_id == 0)){%>
+                        <%if((data.emailheader.trim() == tasks[i].assignee_email) || (tasks[i].assignee_id == 0) || (data.type == 1)){%>
                             <a class="booking-item" href="/edit-task?id=<%= tasks[i].task_id%>">
                         <%}else{%>
                                 <a class="booking-item" href="" onclick="javascript:return false;">

@@ -131,7 +131,7 @@ exports.getEmail=function(req,res){
 };
 exports.count=function(req,res){
     var input = JSON.parse(JSON.stringify(req.body));
-    console.log(input);
+
 
     var sql = 'select \n' +
         't.task_code,\n' +
@@ -144,7 +144,7 @@ exports.count=function(req,res){
         '(select description from status s where s.status_id = t.status_id) as status,\n' +
         '(select code from project p where p.project_id = t.project_id) as project\n' +
         'from employee.task t where status_id =  ';
-    console.log(input);
+
     if(parseInt(input.statusflt) == 1){
         sql += '5 ';
     }else{
@@ -167,7 +167,7 @@ exports.count=function(req,res){
     }
     if(input.toflt != '' && input.toflt != undefined){
         var to = input.toflt.split("-");
-        var newDOB = from[2]+from[1]+from[0];
+        var newDOB = to[2]+to[1]+to[0];
         sql += 'and `close_time` <= '+newDOB+' ';
     }
 

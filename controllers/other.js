@@ -255,7 +255,7 @@ module.exports.export_excel_count=function(req,res){
     }
     if(req.query.toflt != '' && req.query.toflt != undefined){
         var to = req.query.toflt.split("/");
-        var newDOB = from[2]+from[1]+from[0];
+        var newDOB = to[2]+to[1]+to[0];
         sql += 'and `close_time` <= '+newDOB+' ';
     }
 
@@ -398,7 +398,7 @@ module.exports.paid=function(req,res){
     }
     if(req.query.toflt != '' && req.query.toflt != undefined){
         var to = req.query.toflt.split("/");
-        var newDOB = from[2]+from[1]+from[0];
+        var newDOB = to[2]+to[1]+to[0];
         sql += 'and `close_time` <= '+newDOB+' ';
     }
 
