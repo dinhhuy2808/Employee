@@ -186,14 +186,10 @@ module.exports.show_task=function(req,res){
             '    (select email from user where user_id = `task`.`reporter_id`) as reporter_email\n' +
             'FROM `employee`.`task` where `project_id` = '+req.query.id;
 
-        if(req.session.type == 1){
-            if(req.query.assigneeflt != '' && req.query.assigneeflt != undefined){
-                sql += ' and `assignee_id` = (select user_id from user where email = \''+req.query.assigneeflt+'\') ';
-            }
-        }else{
-            sql += ' and `assignee_id` in (0,'+req.session.user_id+') ';
-        }
 
+        if(req.query.assigneeflt != '' && req.query.assigneeflt != undefined){
+            sql += ' and `assignee_id` = (select user_id from user where email = \''+req.query.assigneeflt+'\') ';
+        }
         if(req.query.reporterflt != '' && req.query.reporterflt != undefined){
             sql += ' and `reporter_id` = (select user_id from user where email = \''+req.query.reporterflt+'\') ';
         }

@@ -157,7 +157,7 @@ module.exports.edit_account = function(req, res){
             }
         });
     }else{
-        req.models.user.find({email:res.session.email},function(err,rows){
+        req.models.user.find({email:req.session.email},function(err,rows){
             if(err){
                 console.log(err);
             }
