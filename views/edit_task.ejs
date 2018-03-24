@@ -215,49 +215,104 @@
                     <div class="form-group form-group-icon-left"><i class="fa fa-user input-icon input-icon-show"></i>
 
                     </div>
+                    <div class="row">
+                        <div class = "col-md-4">
+                            <div class="form-group form-group-icon-left"><i class="fa fa-user input-icon input-icon-show"></i>
+                                <label>Status</label>
+                                <select name="status" id="status" onchange="selectChange()">
+                                    <%if(data.type == 1){%>
+                                    <% for (var i = 0;i<data.status.length;i++){%>
+                                    <%if(data.status[i].status_id == tasks[0].status_id){%>
+                                    <option value="<%=data.status[i].status_id%>" selected><%=data.status[i].description%></option>
+                                    <%} else {%>
+                                    <option value="<%=data.status[i].status_id%>"><%=data.status[i].description%></option>
+                                    <%}%>
+                                    <%}%>
+                                    <%} else {%>
+                                    <% for (var i = 0;i<data.status.length-2;i++){%>
+                                    <%if(data.status[i].status_id == tasks[0].status_id){%>
+                                    <option value="<%=data.status[i].status_id%>" selected><%=data.status[i].description%></option>
+                                    <%} else {%>
+                                    <option value="<%=data.status[i].status_id%>"><%=data.status[i].description%></option>
+                                    <%}%>
+                                    <%}%>
+                                    <%}%>
 
-                    <div class="form-group form-group-icon-left"><i class="fa fa-user input-icon input-icon-show"></i>
-                        <label>Status</label>
-                        <select name="status" id="status" onchange="selectChange()">
-                            <%if(data.type == 1){%>
-                                <% for (var i = 0;i<data.status.length;i++){%>
-                                <%if(data.status[i].status_id == tasks[0].status_id){%>
-                                <option value="<%=data.status[i].status_id%>" selected><%=data.status[i].description%></option>
+
+                                </select>
+                                <input class="form-control" type="text" name="sttdesc" id="sttdesc" value='' style="display: none" >
+                            </div>
+                        </div>
+                        <div class = "col-md-1">
+
+                        </div>
+                        <div class = "col-md-3">
+                            <div class="form-group form-group-icon-left"><i class="fa fa-user input-icon input-icon-show"></i>
+                                <label>Approved</label>
+
+                                <%if(data.type == 1) {%>
+                                <select name="approved" id="approved">
+                                    <option value="N" selected>No</option>
+                                    <option value="Y">Yes</option>
+                                    <option value="D">Deny</option>
+                                </select>
                                 <%} else {%>
-                                <option value="<%=data.status[i].status_id%>"><%=data.status[i].description%></option>
+                                <select name="approved" id="approved" disabled>
+                                    <option value="N" selected>No</option>
+                                    <option value="Y">Yes</option>
+                                </select>
                                 <%}%>
-                                <%}%>
-                            <%} else {%>
-                                <% for (var i = 0;i<data.status.length-2;i++){%>
-                                <%if(data.status[i].status_id == tasks[0].status_id){%>
-                                <option value="<%=data.status[i].status_id%>" selected><%=data.status[i].description%></option>
-                                <%} else {%>
-                                <option value="<%=data.status[i].status_id%>"><%=data.status[i].description%></option>
-                                <%}%>
-                                <%}%>
-                            <%}%>
+                            </div>
+                        </div>
 
-
-                        </select>
-                        <input class="form-control" type="text" name="sttdesc" id="sttdesc" value='' style="display: none" >
                     </div>
 
-                    <div class="form-group form-group-icon-left"><i class="fa fa-user input-icon input-icon-show"></i>
-                        <label>Approved</label>
 
-                        <%if(data.type == 1) {%>
-                        <select name="approved" id="approved">
-                            <option value="N" selected>No</option>
-                            <option value="Y">Yes</option>
-                            <option value="D">Deny</option>
-                        </select>
-                        <%} else {%>
-                        <select name="approved" id="approved" disabled>
-                            <option value="N" selected>No</option>
-                            <option value="Y">Yes</option>
-                        </select>
-                        <%}%>
+                    <div class="row">
+                        <div class = "col-md-4">
+                            <div class="form-group form-group-icon-left"><i class="fa fa-user input-icon input-icon-show"></i>
+                                <label>Ref Name</label>
+                                <select name="refname" id="refname">
+                                    <% for (var i = 0;i<data.refname.length;i++){%>
+                                        <%if(data.refname[i].ref_id == tasks[0].ref_id){%>
+                                        <option value="<%=data.refname[i].ref_id%>" selected><%=data.refname[i].description%></option>
+                                        <%} else {%>
+                                        <option value="<%=data.refname[i].ref_id%>"><%=data.refname[i].description%></option>
+                                        <%}%>
+                                    <%}%>
+
+
+
+                                </select>
+                                <input class="form-control" type="text" name="sttdesc" id="sttdesc" value='' style="display: none" >
+                            </div>
+                        </div>
+                        <div class = "col-md-1">
+
+                        </div>
+                        <div class = "col-md-3">
+                            <div class="form-group form-group-icon-left"><i class="fa fa-user input-icon input-icon-show"></i>
+                                <label>Activity</label>
+
+                                <select name="activity" id="activity">
+                                    <% for (var i = 0;i<data.activity.length;i++){%>
+                                    <%if(data.activity[i].activity_id == tasks[0].activity_id){%>
+                                    <option value="<%=data.activity[i].activity_id%>" selected><%=data.activity[i].description%></option>
+                                    <%} else {%>
+                                    <option value="<%=data.activity[i].activity_id%>"><%=data.activity[i].description%></option>
+                                    <%}%>
+                                    <%}%>
+
+
+
+                                </select>
+                            </div>
+                        </div>
+
                     </div>
+
+
+
                     <input type="text" name="creator_id" id="creator_id" value='<%= tasks[0].reporter_id %>'style="display: none">
 
                     <input type="text" name="project_id" id="project_id" value='<%= tasks[0].project_id %>'style="display: none">

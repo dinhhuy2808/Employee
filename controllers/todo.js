@@ -512,7 +512,7 @@ module.exports.save_task=function(req,res){
 
                     if(input.refname != undefined){
                         if(row1[0].ref_id != input.refname){
-                            sql +=  ',`refname` = '+input.refname+' ';
+                            sql +=  ',`ref_id` = '+input.refname+' ';
                         }
                     }
                     if(input.activity != undefined){
@@ -612,31 +612,21 @@ module.exports.save_task=function(req,res){
                                 sqlInsAct.push('INSERT INTO `employee`.`action`(`task_id`,`update_time`,`status_id`,`user_id`,`description`)\n' +
                                     'VALUES('+input.task_id+',\''+date.toString()+'\','+row1[0].status_id+','+req.session.user_id+',\'Change Status to '+input.sttdesc+'\');'+'\n');
                             }
-
+                            if((parseInt(row1[0].ref_id) != parseInt(input.refname))){
+                                sqlInsAct.push('INSERT INTO `employee`.`action`(`task_id`,`update_time`,`status_id`,`user_id`,`description`)\n' +
+                                    'VALUES('+input.task_id+',\''+date.toString()+'\','+row1[0].status_id+','+req.session.user_id+',(select CONCAT(\'Change Refname to \',description) as result from refname where ref_id =  '+input.refname+'));'+'\n');
+                            }
+                            if(parseInt(row1[0].activity_id) != parseInt(input.activity)){
+                                sqlInsAct.push('INSERT INTO `employee`.`action`(`task_id`,`update_time`,`status_id`,`user_id`,`description`)\n' +
+                                    'VALUES('+input.task_id+',\''+date.toString()+'\','+row1[0].status_id+','+req.session.user_id+',(select CONCAT(\'Change Activity to \',description) as result from refname where ref_id =  '+input.activity+'));'+'\n');
+                            }
                             for (var i = 0; i < sqlInsAct.length; i++) {
                                 con.query(sqlInsAct[i], function (err, row1s) {
                                     if(err){
                                         console.log(err + sqlInsAct);
                                     }
                                     else {
-                                        /* var sql = 'UPDATE `employee`.`task` ' +
-                                             'SET ' ;
-                                         if(req.session.type == 1){
-                                             sql+='`approved` = \''+input.approved+'\', ';
-                                         }
-                                         sql += '`status_id` = '+input.status+', ' +
-                                             '`assignee_id` = '+input.assignee_id+', ' +
-                                             '`estimate` = '+input.estimate+', ' +
-                                             '`log_work` = \''+input.log+'\', ' +
-                                             '`description` = \''+input.description+'\' ' +
-                                             ' WHERE `task`.`task_id` = '+input.task_id;
-                                         var con = req.db.driver.db;
-                                         con.query(sql, function (err, rows) {
-                                             if(err){
-                                                 console.log(err);
-                                             }
 
-                                         });*/
                                     }
                                 });
                             }
@@ -645,58 +635,7 @@ module.exports.save_task=function(req,res){
                     });
 
 
-                    /* var sqlInsAct = '';
-                    if(row1[0].assignee_id != input.assignee_id){
-                        sqlInsAct += 'INSERT INTO `employee`.`action`(`task_id`,`update_time`,`status_id`,`user_id`,`description`)\n' +
-                            'VALUES('+input.task_id+',\''+date.getTime()+'\','+row1[0].status_id+','+req.session.user_id+',\'Change Assignee to '+input.name+'\');';
-                    }
-                     if(row1[0].estimate != input.estimate){
-                         sqlInsAct += 'INSERT INTO `employee`.`action`(`task_id`,`update_time`,`status_id`,`user_id`,`description`)\n' +
-                             'VALUES('+input.task_id+',\''+date.getTime()+'\','+row1[0].status_id+','+req.session.user_id+',\'Change Estimate to '+input.estimate+'\');';
-                     }
-                     if(row1[0].log_work.trim !== input.log){
-                         sqlInsAct += 'INSERT INTO `employee`.`action`(`task_id`,`update_time`,`status_id`,`user_id`,`description`)\n' +
-                             'VALUES('+input.task_id+',\''+date.getTime()+'\','+row1[0].status_id+','+req.session.user_id+',\'Change Log Work to '+input.log+'\');';
-                     }
-                     if(row1[0].description.trim !== input.description){
-                         sqlInsAct += 'INSERT INTO `employee`.`action`(`task_id`,`update_time`,`status_id`,`user_id`,`description`)\n' +
-                             'VALUES('+input.task_id+',\''+date.getTime()+'\','+row1[0].status_id+','+req.session.user_id+',\'Change Description to '+input.description+'\');';
-                     }
-                     if(req.session.type == 1){
-                         if(row1[0].approved.trim !== input.approved){
-                             sqlInsAct += 'INSERT INTO `employee`.`action`(`task_id`,`update_time`,`status_id`,`user_id`,`description`)\n' +
-                                 'VALUES('+input.task_id+',\''+date.getTime()+'\','+row1[0].status_id+','+req.session.user_id+',\'Change Approved to '+input.approved+'\');';
-                         }
-                     }
-                     if(row1[0].status_id != input.status){
-                         sqlInsAct += 'INSERT INTO `employee`.`action`(`task_id`,`update_time`,`status_id`,`user_id`,`description`)\n' +
-                             'VALUES('+input.task_id+',\''+date.getTime()+'\','+row1[0].status_id+','+req.session.user_id+',\'Change Status to '+input.sttdesc+'\');';
-                     }
-                     con.query(sqlInsAct, function (err, row1s) {
-                         if(err){
-                             console.log(err);
-                         }
-                         else {
-                             var sql = 'UPDATE `employee`.`task` ' +
-                                 'SET ' ;
-                             if(req.session.type == 1){
-                                 sql+='`approved` = \''+input.approved+'\', ';
-                             }
-                             sql += '`status_id` = '+input.status+', ' +
-                                 '`assignee_id` = '+input.assignee_id+', ' +
-                                 '`estimate` = '+input.estimate+', ' +
-                                 '`log_work` = \''+input.log+'\', ' +
-                                 '`description` = \''+input.description+'\' ' +
-                                 ' WHERE `task`.`task_id` = '+input.task_id;
-                             var con = req.db.driver.db;
-                             con.query(sql, function (err, rows) {
-                                 if(err){
-                                     console.log(err);
-                                 }
 
-                             });
-                         }
-                     });*/
                 }
             });
         }else{
@@ -740,7 +679,7 @@ module.exports.save_task=function(req,res){
 
                         if(input.refname != undefined){
                             if(row1[0].ref_id != input.refname){
-                                sql +=  ',`refname` = '+input.refname+' ';
+                                sql +=  ',`ref_id` = '+input.refname+' ';
                             }
                         }
                         if(input.activity != undefined){
@@ -843,31 +782,21 @@ module.exports.save_task=function(req,res){
                                     sqlInsAct.push('INSERT INTO `employee`.`action`(`task_id`,`update_time`,`status_id`,`user_id`,`description`)\n' +
                                         'VALUES('+input.task_id+',\''+date.toString()+'\','+row1[0].status_id+','+req.session.user_id+',\'Change Status to '+input.sttdesc+'\');'+'\n');
                                 }
-
+                                if(parseInt(row1[0].ref_id) != parseInt(input.refname)){
+                                    sqlInsAct.push('INSERT INTO `employee`.`action`(`task_id`,`update_time`,`status_id`,`user_id`,`description`)\n' +
+                                        'VALUES('+input.task_id+',\''+date.toString()+'\','+row1[0].status_id+','+req.session.user_id+',(select CONCAT(\'Change Refname to \',description) as result from refname where ref_id =  '+input.refname+'));'+'\n');
+                                }
+                                if(parseInt(row1[0].activity_id) != parseInt(input.activity)){
+                                    sqlInsAct.push('INSERT INTO `employee`.`action`(`task_id`,`update_time`,`status_id`,`user_id`,`description`)\n' +
+                                        'VALUES('+input.task_id+',\''+date.toString()+'\','+row1[0].status_id+','+req.session.user_id+',(select CONCAT(\'Change Activity to \',description) as result from refname where ref_id =  '+input.activity+'));'+'\n');
+                                }
                                 for (var i = 0; i < sqlInsAct.length; i++) {
                                     con.query(sqlInsAct[i], function (err, row1s) {
                                         if(err){
                                             console.log(err + sqlInsAct);
                                         }
                                         else {
-                                            /* var sql = 'UPDATE `employee`.`task` ' +
-                                                 'SET ' ;
-                                             if(req.session.type == 1){
-                                                 sql+='`approved` = \''+input.approved+'\', ';
-                                             }
-                                             sql += '`status_id` = '+input.status+', ' +
-                                                 '`assignee_id` = '+input.assignee_id+', ' +
-                                                 '`estimate` = '+input.estimate+', ' +
-                                                 '`log_work` = \''+input.log+'\', ' +
-                                                 '`description` = \''+input.description+'\' ' +
-                                                 ' WHERE `task`.`task_id` = '+input.task_id;
-                                             var con = req.db.driver.db;
-                                             con.query(sql, function (err, rows) {
-                                                 if(err){
-                                                     console.log(err);
-                                                 }
 
-                                             });*/
                                         }
                                     });
                                 }
@@ -876,58 +805,7 @@ module.exports.save_task=function(req,res){
                         });
 
 
-                        /* var sqlInsAct = '';
-                        if(row1[0].assignee_id != input.assignee_id){
-                            sqlInsAct += 'INSERT INTO `employee`.`action`(`task_id`,`update_time`,`status_id`,`user_id`,`description`)\n' +
-                                'VALUES('+input.task_id+',\''+date.getTime()+'\','+row1[0].status_id+','+req.session.user_id+',\'Change Assignee to '+input.name+'\');';
-                        }
-                         if(row1[0].estimate != input.estimate){
-                             sqlInsAct += 'INSERT INTO `employee`.`action`(`task_id`,`update_time`,`status_id`,`user_id`,`description`)\n' +
-                                 'VALUES('+input.task_id+',\''+date.getTime()+'\','+row1[0].status_id+','+req.session.user_id+',\'Change Estimate to '+input.estimate+'\');';
-                         }
-                         if(row1[0].log_work.trim !== input.log){
-                             sqlInsAct += 'INSERT INTO `employee`.`action`(`task_id`,`update_time`,`status_id`,`user_id`,`description`)\n' +
-                                 'VALUES('+input.task_id+',\''+date.getTime()+'\','+row1[0].status_id+','+req.session.user_id+',\'Change Log Work to '+input.log+'\');';
-                         }
-                         if(row1[0].description.trim !== input.description){
-                             sqlInsAct += 'INSERT INTO `employee`.`action`(`task_id`,`update_time`,`status_id`,`user_id`,`description`)\n' +
-                                 'VALUES('+input.task_id+',\''+date.getTime()+'\','+row1[0].status_id+','+req.session.user_id+',\'Change Description to '+input.description+'\');';
-                         }
-                         if(req.session.type == 1){
-                             if(row1[0].approved.trim !== input.approved){
-                                 sqlInsAct += 'INSERT INTO `employee`.`action`(`task_id`,`update_time`,`status_id`,`user_id`,`description`)\n' +
-                                     'VALUES('+input.task_id+',\''+date.getTime()+'\','+row1[0].status_id+','+req.session.user_id+',\'Change Approved to '+input.approved+'\');';
-                             }
-                         }
-                         if(row1[0].status_id != input.status){
-                             sqlInsAct += 'INSERT INTO `employee`.`action`(`task_id`,`update_time`,`status_id`,`user_id`,`description`)\n' +
-                                 'VALUES('+input.task_id+',\''+date.getTime()+'\','+row1[0].status_id+','+req.session.user_id+',\'Change Status to '+input.sttdesc+'\');';
-                         }
-                         con.query(sqlInsAct, function (err, row1s) {
-                             if(err){
-                                 console.log(err);
-                             }
-                             else {
-                                 var sql = 'UPDATE `employee`.`task` ' +
-                                     'SET ' ;
-                                 if(req.session.type == 1){
-                                     sql+='`approved` = \''+input.approved+'\', ';
-                                 }
-                                 sql += '`status_id` = '+input.status+', ' +
-                                     '`assignee_id` = '+input.assignee_id+', ' +
-                                     '`estimate` = '+input.estimate+', ' +
-                                     '`log_work` = \''+input.log+'\', ' +
-                                     '`description` = \''+input.description+'\' ' +
-                                     ' WHERE `task`.`task_id` = '+input.task_id;
-                                 var con = req.db.driver.db;
-                                 con.query(sql, function (err, rows) {
-                                     if(err){
-                                         console.log(err);
-                                     }
 
-                                 });
-                             }
-                         });*/
                     }
                 });
             }else{
@@ -954,6 +832,8 @@ module.exports.edit_task=function(req,res){
             '    `task`.`description`,\n' +
             '    `task`.`reporter_id`,\n' +
             '    `task`.`task_code`,\n' +
+            '    `task`.`ref_id`,\n' +
+            '    `task`.`activity_id`,\n' +
             '    `action`.`update_time`,\n' +
             '    `action`.`description` as action_description,\n' +
             '    (select description from status where status_id = `task`.`status_id`) as status,\n' +
@@ -979,8 +859,32 @@ module.exports.edit_task=function(req,res){
                         console.log(err);
                     }
                     else{
-                        data={title:'Tasks | '+req.session.firstname,fname:req.session.firstname,lname:req.session.lastname,tasks:rows,status:row2s,type:req.session.type,userid:req.session.user_id};
-                        res.render('edit_task',data);
+                        sql = 'select * from refname;'
+                        con.query(sql, function (err, rowRef) {
+                            if(err){
+                                console.log(err);
+                            }
+                            else{
+                                sql = 'select * from activity;'
+                                con.query(sql, function (err, rowAct) {
+                                    if(err){
+                                        console.log(err);
+                                    }
+                                    else{
+                                        data={title:'Tasks | '+req.session.firstname
+                                            ,fname:req.session.firstname
+                                            ,lname:req.session.lastname
+                                            ,tasks:rows,status:row2s
+                                            ,type:req.session.type
+                                            ,userid:req.session.user_id
+                                            ,refname:rowRef
+                                            ,activity:rowAct};
+                                        res.render('edit_task',data);
+                                    }
+                                });
+                            }
+                        });
+
 
                     }
                 });
@@ -1035,8 +939,32 @@ module.exports.edit_task=function(req,res){
                                         console.log(err);
                                     }
                                     else{
-                                        data={title:'Tasks | '+req.session.firstname,fname:req.session.firstname,lname:req.session.lastname,tasks:rows,status:row2s,type:req.session.type,userid:req.session.user_id};
-                                        res.render('edit_task',data);
+                                        sql = 'select * from refname;'
+                                        con.query(sql, function (err, rowRef) {
+                                            if(err){
+                                                console.log(err);
+                                            }
+                                            else{
+                                                sql = 'select * from activity;'
+                                                con.query(sql, function (err, rowAct) {
+                                                    if(err){
+                                                        console.log(err);
+                                                    }
+                                                    else{
+                                                        data={title:'Tasks | '+req.session.firstname
+                                                            ,fname:req.session.firstname
+                                                            ,lname:req.session.lastname
+                                                            ,tasks:rows,status:row2s
+                                                            ,type:req.session.type
+                                                            ,userid:req.session.user_id
+                                                            ,refname:rowRef
+                                                            ,activity:rowAct};
+                                                        res.render('edit_task',data);
+                                                    }
+                                                });
+                                            }
+                                        });
+
 
                                     }
                                 });

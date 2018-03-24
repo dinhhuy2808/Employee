@@ -10,35 +10,36 @@ CREATE TABLE IF NOT EXISTS `employee`.`refname` (
   
   alter table task add ref_id int null;
   alter table task add activity_id int null;
+  
+	insert into refname(ref_id,description) values (1,' ');
+  insert into refname(ref_id,description) values (2,'Audio Design');
+  insert into refname(ref_id,description) values (3,'EE Design');
+  insert into refname(ref_id,description) values (4,'EE Library');
+  insert into refname(ref_id,description) values (5,'EE Test');
+  insert into refname(ref_id,description) values (6,'ME Design');
+  insert into refname(ref_id,description) values (7,'ME Drawing');
+  insert into refname(ref_id,description) values (8,'PCB Design');
+  insert into refname(ref_id,description) values (9,'PM');
+  insert into refname(ref_id,description) values (10,'RF Design');
+  insert into refname(ref_id,description) values (11,'SW Design');
+  
+  insert into activity(activity_id,description) values (1,' ');
+  insert into activity(activity_id,description) values (2,'Admin');
+insert into activity(activity_id,description) values (3,'Factory');
+insert into activity(activity_id,description) values (4,'General-Library');
+insert into activity(activity_id,description) values (5,'Meeting');
+insert into activity(activity_id,description) values (6,'NBH');
+insert into activity(activity_id,description) values (7,'PCB Camera');
+insert into activity(activity_id,description) values (8,'PCB Imager');
+insert into activity(activity_id,description) values (9,'PCB Main');
+insert into activity(activity_id,description) values (10,'PCB Power');
+insert into activity(activity_id,description) values (11,'PCB Sensor');
+insert into activity(activity_id,description) values (12,'Phase I-Concept');
+insert into activity(activity_id,description) values (13,'Phase II-Design');
+insert into activity(activity_id,description) values (14,'Phase III-Optimize');
+insert into activity(activity_id,description) values (15,'Planning');
+insert into activity(activity_id,description) values (16,'Sales');
+insert into activity(activity_id,description) values (17,'Testing');
+insert into activity(activity_id,description) values (18,'Quote');
+insert into activity(activity_id,description) values (19,'Product');
 
-  insert into refname(description) values ('Audio Design');
-  insert into refname(description) values ('EE Design');
-  insert into refname(description) values ('EE Library');
-  insert into refname(description) values ('EE Test');
-  insert into refname(description) values ('ME Design');
-  insert into refname(description) values ('ME Drawing');
-  insert into refname(description) values ('PCB Design');
-  insert into refname(description) values ('PM');
-  insert into refname(description) values ('RF Design');
-  insert into refname(description) values ('SW Design');
-  
-  insert into activity(description) values ('');
-  insert into activity(description) values ('Admin');
-insert into activity(description) values ('Factory');
-insert into activity(description) values ('General-Library');
-insert into activity(description) values ('Meeting');
-insert into activity(description) values ('NBH');
-insert into activity(description) values ('PCB Camera');
-insert into activity(description) values ('PCB Imager');
-insert into activity(description) values ('PCB Main');
-insert into activity(description) values ('PCB Power');
-insert into activity(description) values ('PCB Sensor');
-insert into activity(description) values ('Phase I-Concept');
-insert into activity(description) values ('Phase II-Design');
-insert into activity(description) values ('Phase III-Optimize');
-insert into activity(description) values ('Planning');
-insert into activity(description) values ('Sales');
-insert into activity(description) values ('Testing');
-insert into activity(description) values ('Quote');
-insert into activity(description) values ('Product');
-  
