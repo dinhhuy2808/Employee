@@ -618,7 +618,7 @@ module.exports.save_task=function(req,res){
                             }
                             if(parseInt(row1[0].activity_id) != parseInt(input.activity)){
                                 sqlInsAct.push('INSERT INTO `employee`.`action`(`task_id`,`update_time`,`status_id`,`user_id`,`description`)\n' +
-                                    'VALUES('+input.task_id+',\''+date.toString()+'\','+row1[0].status_id+','+req.session.user_id+',(select CONCAT(\'Change Activity to \',description) as result from refname where ref_id =  '+input.activity+'));'+'\n');
+                                    'VALUES('+input.task_id+',\''+date.toString()+'\','+row1[0].status_id+','+req.session.user_id+',(select CONCAT(\'Change Activity to \',description) as result from activity where activity_id =  '+input.activity+'));'+'\n');
                             }
                             for (var i = 0; i < sqlInsAct.length; i++) {
                                 con.query(sqlInsAct[i], function (err, row1s) {
@@ -788,7 +788,7 @@ module.exports.save_task=function(req,res){
                                 }
                                 if(parseInt(row1[0].activity_id) != parseInt(input.activity)){
                                     sqlInsAct.push('INSERT INTO `employee`.`action`(`task_id`,`update_time`,`status_id`,`user_id`,`description`)\n' +
-                                        'VALUES('+input.task_id+',\''+date.toString()+'\','+row1[0].status_id+','+req.session.user_id+',(select CONCAT(\'Change Activity to \',description) as result from refname where ref_id =  '+input.activity+'));'+'\n');
+                                        'VALUES('+input.task_id+',\''+date.toString()+'\','+row1[0].status_id+','+req.session.user_id+',(select CONCAT(\'Change Activity to \',description) as result from activity where activity_id =  '+input.activity+'));'+'\n');
                                 }
                                 for (var i = 0; i < sqlInsAct.length; i++) {
                                     con.query(sqlInsAct[i], function (err, row1s) {

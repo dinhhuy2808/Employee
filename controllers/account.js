@@ -18,8 +18,7 @@ module.exports.signup=function(req,res){
 		passwd=md5(input.password);
 		var dataUser = {
             email   : input.email,
-            dob:input.dob,
-            phone    : input.phone,
+            dob:input.dob,phone    : input.phone,
             firstname    : input.fname,
             lastname : input.lname,
             dob:newDOB,
@@ -213,4 +212,46 @@ module.exports.save_account = function(req, res){
 
 
 };
+    module.exports.reset_password = function(req, res){
 
+            req.models.user.find({user_id:req.query.id},function(err,rows){
+                if(err){
+                    console.log(err);
+                }
+                else{
+                    data={title:'Reset Password | '+req.session.firstname,fname:req.session.firstname,user:rows,type:req.session.type};
+                    res.render('reset_password',data);
+
+                }
+            });
+
+
+
+    };
+
+
+    module.exports.update_password = function(req, res){
+        var input=JSON.parse(JSON.stringify(req.body));
+        var passwd=md5(input.newPassword);
+        var sql = 'update user set password = \''+passwd+'\' where user_id = '+input.userid + ';';
+        var con = req.db.driver.db;
+        con.query(sql, function (err, rows) {
+            if(err){
+                console.log(err);
+                res.redirect('/')
+            }else{
+                if(req.session.type == 1){
+                    res.redirect('/maintenance');
+                }else{
+                    res.redirect('/');
+                }
+            }
+
+
+        });
+
+
+
+
+
+    };

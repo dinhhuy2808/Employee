@@ -228,6 +228,7 @@
                             <h4 class="booking-item-title">Phone Numb</h4>
                         </div>
 
+
                     </div>
                     <% for(i = 0;i < users.length;i++){ %>
                     <li>
@@ -254,7 +255,23 @@
                                     <div class="col-md-2">
                                         <p class="booking-item-description" ><%= users[i].phone %></p>
                                     </div>
+                                    <div class="col-md-2">
 
+
+
+                                        <table>
+                                            <tr>
+                                                <%if(data.type == 1){%>
+                                                <td>
+                                                    <a class="btn btn-primary" href="/reset-password?id=<%= users[i].user_id%>">Reset Password</a>
+                                                </td>
+
+
+                                                <%}%>
+                                            </tr>
+
+                                        </table>
+                                    </div>
                                 </div>
 
                             </div>

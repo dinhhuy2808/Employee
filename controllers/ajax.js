@@ -1,3 +1,4 @@
+var md5 = require('MD5');
 exports.checkEmail=function(req,res){
 	var input = JSON.parse(JSON.stringify(req.body));
 	console.log(input);
@@ -232,6 +233,32 @@ exports.getTask=function(req,res){
             if(rows.length>0){
                 data={names: rows};
             }
+            res.json(data);
+        }
+    });
+
+};
+exports.check_pass=function(req,res){
+    var input = JSON.parse(JSON.stringify(req.body));
+    console.log(input);
+    var passwd=md5(input.char);
+    var sql = 'select user_id from user where password = \'' + passwd + '\';';
+    var con = req.db.driver.db;
+    con.query(sql, function (err, rows) {
+        if(err){
+            console.log(err);
+        }
+        else{
+            var data;
+            if(rows.length > 0){
+                if(parseInt(rows[0].user_id) == parseInt(req.session.user_id)){
+                    data={status:'exist',code:'300' , detail:rows};
+                }
+
+            }else{
+                data={status:'not',code:'400',};
+            }
+
             res.json(data);
         }
     });
