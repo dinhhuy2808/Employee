@@ -3,32 +3,32 @@ module.exports.export_excel=function(req,res){
 	var dateFormat = require('dateformat');
 	var conf={}
 	conf.cols=[{
-			caption:'Project',
+			caption:'PROJECT',
 			type:'string',
 			width:50
 		},
 		{
-			caption:'Task',
+			caption:'TASK',
 			type:'string',
 			width:10
 		},
 		{
-			caption:'Assignee',
+			caption:'ASSIGNEE',
 			type:'string',
 			width:50
 		},
         {
-            caption:'Reporter',
+            caption:'REPORTER',
             type:'String',
             width:50
         },
         {
-            caption:'Approved',
+            caption:'APPROVED',
             type:'String',
             width:50
         },
         {
-            caption:'Status',
+            caption:'STATUS',
             type:'String',
             width:50
         }
@@ -85,37 +85,37 @@ module.exports.export_excel_user=function(req,res){
     var dateFormat = require('dateformat');
     var conf={}
     conf.cols=[{
-            caption:'Name',
+            caption:'NAME',
             type:'string',
             width:50
         },
         {
-            caption:'Birth Date',
+            caption:'BIRTHDAY',
             type:'string',
             width:30
         },
         {
-            caption:'Email',
+            caption:'EMAIL',
             type:'string',
             width:50
         },
         {
-            caption:'Phone',
+            caption:'PHONE',
             type:'String',
             width:50
         },
         {
-            caption:'Salary',
+            caption:'SALARY',
             type:'String',
             width:50
         },
         {
-            caption:'Created Date',
+            caption:'CREATED DATE',
             type:'String',
             width:50
         },
         {
-            caption:'Type',
+            caption:'TYPE',
             type:'String',
             width:50
         }
@@ -186,54 +186,118 @@ module.exports.export_excel_count=function(req,res){
     var dateFormat = require('dateformat');
     var conf={}
     conf.cols=[{
-        caption:'Name',
+        caption:'NO.',
         type:'string',
-        width:30
+        width:10
     },
 
         {
-            caption:'Email',
+            caption:'DATE START TASK',
             type:'string',
             width:30
         },
 
         {
-            caption:'Salary/Hour (USD)',
+            caption:'ENGINEER',
             type:'String',
             width:30
         },
 
         {
-            caption:'Project',
+            caption:'EMAIL',
             type:'String',
-            width:50
+            width:30
         },
         {
-            caption:'Task Code',
+            caption:'CUSTOMER',
+            type:'String',
+            width:30
+        },
+        {
+            caption:'PROJECT CODE',
+            type:'String',
+            width:10
+        },
+        {
+            caption:'TASK CODE',
+            type:'String',
+            width:10
+        },
+        {
+            caption:'PROJECT',
+            type:'String',
+            width:30
+        },
+        {
+            caption:'REF NAME',
+            type:'String',
+            width:30
+        },
+        {
+            caption:'ACTIVITY',
+            type:'String',
+            width:30
+        },
+        {
+            caption:'DESCRIPTION',
+            type:'String',
+            width:30
+        },
+        {
+            caption:'STATUS',
+            type:'String',
+            width:10
+        },
+        {
+            caption:'ESTIMATE',
+            type:'String',
+            width:10
+        },
+        {
+            caption:'SALARY/HOUR',
+            type:'String',
+            width:10
+        },
+        {
+            caption:'TOTAL',
+            type:'String',
+            width:10
+        },
+        {
+            caption:'PAID(Y/N)',
+            type:'String',
+            width:5
+        },
+        {
+            caption:'BILLED(Y/N)',
+            type:'String',
+            width:5
+        },
+        {
+            caption:'DATE BILLED',
             type:'String',
             width:20
-        },
-        {
-            caption:'Status',
-            type:'String',
-            width:10
-        },
-        {
-            caption:'Estimate (hour)',
-            type:'String',
-            width:10
         }
 
     ];
 
-    var sql = 'select *,\n' +
-        '(select firstname from user u where u.user_id = t.assignee_id) as firstname,\n' +
-        '(select lastname from user u where u.user_id = t.assignee_id) as lastname,\n' +
+    var sql = 'select \n' +
+        '(select DATE_FORMAT(STR_TO_DATE((select create_time from task where task_id = t.task_id), \'%Y%m%d\'), \'%m/%d/%Y\')) as start_date,\n' +
+        '(select concat(u.firstname,\' \',u.lastname) from user u where u.user_id = t.assignee_id) as engineer,\n' +
         '(select email from user u where u.user_id = t.assignee_id) as email,\n' +
+        '(select concat(u.firstname,\' \',u.lastname)  from user u join project p on u.user_id = p.customer_id where p.project_id = t.project_id) as customer,\n' +
+        '(select code from project where project_id = t.project_id) as project_code,\n' +
+        '(select project_name from project where project_id = t.project_id) as project_name,\n' +
+        't.task_code,\n' +
+        '(select description from refname where ref_id = t.ref_id) as ref_name,\n' +
+        '(select description from activity where activity_id = t.activity_id) as activity_name,\n' +
+        't.description,\n' +
+        '(select description from status where status_id = t.status_id) as status,\n' +
+        't.estimate,\n' +
         '(select salary from user u where u.user_id = t.assignee_id) as salary,\n' +
-        '(select description from status s where s.status_id = t.status_id) as status,\n' +
-        '(select code from project p where p.project_id = t.project_id) as project\n' +
-        'from employee.task t where status_id =  ';
+        '(select estimate*salary) as total,\n' +
+        '(select DATE_FORMAT(STR_TO_DATE((t.bill_date), \'%Y%m%d\'), \'%m/%d/%Y\')) as bill_date\n' +
+        'from task t where status_id = ';
         if(parseInt(req.query.statusflt) == 1){
             sql += '5 ';
         }else{
@@ -269,11 +333,29 @@ module.exports.export_excel_count=function(req,res){
         else{
             if(rows.length >0){
                 arr=[];
-                arr.push(['','','','','','','']);
+                arr.push(['','','','','','','','','','','','','','','','','','','','','']);
                 var temp = 0;
                 var total = 0;
                 for(i=0;i<rows.length;i++){
-                    if(temp != 0){
+                    a=[i+1,
+                        rows[i].start_date,
+                        rows[i].engineer,
+                        rows[i].email,
+                        rows[i].customer,
+                        rows[i].project_code,
+                        rows[i].project_name,
+                        rows[i].task_code,
+                        rows[i].ref_name,
+                        rows[i].activity_name,
+                        rows[i].description,
+                        rows[i].status,
+                        rows[i].estimate,
+                        rows[i].salary,
+                        rows[i].total,
+                        rows[i].status =='Paid'?'Y':'N',
+                        rows[i].status =='Paid'?'Y':'N',
+                        rows[i].bill_date==null?' ':rows[i].bill_date];
+                    /*if(temp != 0){
                         if(temp == parseInt(rows[i].assignee_id)){
                             a=['',
                                 '',
@@ -303,10 +385,10 @@ module.exports.export_excel_count=function(req,res){
                             rows[i].estimate];
 
                     }
-                    total += (parseFloat(rows[i].estimate) * parseFloat(rows[i].salary));
+                    total += (parseFloat(rows[i].estimate) * parseFloat(rows[i].salary));*/
                     arr.push(a);
                 }
-                arr.push(['','','','','','Total: ',total +' USD']);
+               /* arr.push(['','','','','','Total: ',total +' USD']);*/
                 conf.rows=arr;
                 var result=nodeExcel.execute(conf);
                 res.setHeader('Content-Type','application/vnd.openxmlformates');
@@ -333,40 +415,39 @@ module.exports.paid=function(req,res){
     var dateFormat = require('dateformat');
     var conf={}
     conf.cols=[{
-        caption:'Name',
+        caption:'NAME',
         type:'string',
         width:30
     },
 
         {
-            caption:'Email',
+            caption:'EMAIL',
             type:'string',
             width:30
         },
 
         {
-            caption:'Salary/Hour (USD)',
+            caption:'SALARYT/HOUR (USD)',
             type:'String',
             width:30
         },
 
         {
-            caption:'Project',
+            caption:'POROJECT',
             type:'String',
             width:50
-        },
-        {
-            caption:'Task Code',
+        },{
+            caption:'TASK CODE',
             type:'String',
             width:20
         },
         {
-            caption:'Status',
+            caption:'STATUS',
             type:'String',
             width:10
         },
         {
-            caption:'Estimate (hour)',
+            caption:'ESTIMATE (HOUR)',
             type:'String',
             width:10
         }
@@ -411,9 +492,17 @@ module.exports.paid=function(req,res){
         }
         else{
             if(rows.length >0){
+                var date = new Date();
+                var month = date.getMonth() + 1;
+                month = (month < 10 ? "0" : "") + month;
+
+                var day  = date.getDate();
+                day = (day < 10 ? "0" : "") + day;
+                var year = date.getUTCFullYear();
 
                 for(i=0;i<rows.length;i++){
-                    var sqlUpdate = 'update employee.task set status_id = 6 where task_id = '+rows[i].task_id+';';
+
+                    var sqlUpdate = 'update employee.task set status_id = 6 , bill_date = '+parseInt(year+''+month+''+day) +' where task_id = '+rows[i].task_id+';';
                     con.query(sqlUpdate, function (err, rows) {
                         if(err){
                             console.log(err);
@@ -423,6 +512,115 @@ module.exports.paid=function(req,res){
                         });
                 }
 
+            }
+
+        }
+    });
+
+};
+
+module.exports.project_payment=function(req,res){
+    var nodeExcel=require('excel-export');
+    var dateFormat = require('dateformat');
+    var conf={}
+    conf.cols=[{
+        caption:'No.',
+        type:'string',
+        width:10
+    },
+
+        {
+            caption:'DATE START PROJECT',
+            type:'string',
+            width:30
+        },
+
+        {
+            caption:'NAME',
+            type:'String',
+            width:30
+        },
+
+        {
+            caption:'CUSTOMER',
+            type:'String',
+            width:30
+        },
+        {
+            caption:'NUMBER OF TASK',
+            type:'String',
+            width:10
+        },
+        {
+            caption:'TASK APPROVED',
+            type:'String',
+            width:10
+        },
+        {
+            caption:'TASK IS NOT APPROVED',
+            type:'String',
+            width:10
+        },
+        {
+            caption:'DATE',
+            type:'String',
+            width:30
+        },
+        {
+            caption:'TOTAL (USD)',
+            type:'String',
+            width:10
+        }
+
+    ];
+
+    var sql = 'SELECT p.project_id ,\n' +
+        '(select DATE_FORMAT(STR_TO_DATE((select min(create_time) from task where project_id = P.project_id), \'%Y%m%d\'), \'%m/%d/%Y\')) as start_date,\n' +
+        'p.project_name,\n' +
+        '(select concat(firstname,\' \',lastname) from user where user_id = P.customer_id) as customer,\n' +
+        '(select count(task_id) from task where project_id = p.project_id ) as tasks,\n' +
+        '(select count(task_id) from task where project_id = p.project_id and approved = \'Y\') as task_approved,\n' +
+        '(select count(task_id) from task where project_id = p.project_id and approved = \'N\') as task_not_approved,\n' +
+        '(select DATE_FORMAT(STR_TO_DATE((SELECT CURDATE()+0), \'%Y%m%d\'), \'%m/%d/%Y\')) as date,\n' +
+        '(select sum(t.estimate*(select salary from user where user_id = t.assignee_id)) from task t where t.project_id = P.project_id and t.approved = \'Y\') as total\n' +
+        'FROM PROJECT P right JOIN  TASK T ON P.project_id = T.project_id group by project_id;';
+
+
+    var con = req.db.driver.db;
+    con.query(sql, function (err, rows) {
+        if(err){
+            console.log(err);
+            res.redirect('/');
+        }
+        else{
+            if(rows.length >0){
+                arr=[];
+                arr.push(['','','','','','','','','']);
+                for(i=0;i<rows.length;i++){
+                    a=[i+1,
+                        rows[i].start_date,
+                        rows[i].project_name,
+                        rows[i].customer,
+                        rows[i].tasks,
+                        rows[i].task_approved,
+                        rows[i].task_not_approved,
+                        rows[i].date,
+                        rows[i].total]
+                    arr.push(a);
+                }
+                conf.rows=arr;
+                var result=nodeExcel.execute(conf);
+                res.setHeader('Content-Type','application/vnd.openxmlformates');
+                res.setHeader("Content-Disposition","attachment;filename="+"project-payment.xlsx");
+                res.end(result,'binary');
+            }else{
+                arr=[];
+                arr.push(['','','','','',' ',' ']);
+                conf.rows=arr;
+                var result=nodeExcel.execute(conf);
+                res.setHeader('Content-Type','application/vnd.openxmlformates');
+                res.setHeader("Content-Disposition","attachment;filename="+"project-payment.xlsx");
+                res.end(result,'binary');
             }
 
         }

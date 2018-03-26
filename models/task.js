@@ -13,6 +13,7 @@ module.exports = function (orm, db) {
         task_code: {type: 'text'},
         close_time: {type: 'number'},
         ref_id: {type: 'number'},
-        activity_id: {type: 'number'}
+        activity_id: {type: 'number'},
+        bill_date: {type: 'number'}
     });
 };

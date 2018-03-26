@@ -914,6 +914,8 @@ module.exports.edit_task=function(req,res){
                             '    `task`.`description`,\n' +
                             '    `task`.`reporter_id`,\n' +
                             '    `task`.`task_code`,\n' +
+                            '    `task`.`ref_id`,\n' +
+                            '    `task`.`activity_id`,\n' +
                             '    `action`.`update_time`,\n' +
                             '    `action`.`description` as action_description,\n' +
                             '    (select description from status where status_id = `task`.`status_id`) as status,\n' +

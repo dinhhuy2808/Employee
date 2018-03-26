@@ -28,6 +28,7 @@ module.exports=function(app,controllers){
 		app.get('/export-excel/user',controllers.other.export_excel_user);
     	app.get('/export-excel/count',controllers.other.export_excel_count);
     	app.get('/export-excel/paid',controllers.other.paid);
+    	app.get('/export-excel/project-payment',controllers.other.project_payment);
 		app.get('/show-task',controllers.todo.show_task);
 	    app.get('/reset-password',controllers.account.reset_password);
 		app.post('/update-password',controllers.account.update_password);
