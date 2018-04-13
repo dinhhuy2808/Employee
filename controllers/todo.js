@@ -177,6 +177,8 @@ module.exports.show_task=function(req,res){
             '    `task`.`description`,\n' +
             '    `task`.`reporter_id`,\n' +
             '    `task`.`task_code`,\n' +
+            '    (select description from refname  where ref_id = `task`.`ref_id`) as refname,\n' +
+            '    (select description from activity where activity_id = `task`.`activity_id`) as activity,\n' +
             '    (select description from status where status_id = `task`.`status_id`) as status,\n' +
             '    (select firstname from user where user_id = `task`.`reporter_id`) as reporter_firstname,\n' +
             '    (select lastname from user where user_id = `task`.`reporter_id`) as reporter_lastname,\n' +

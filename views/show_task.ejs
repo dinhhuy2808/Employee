@@ -212,7 +212,7 @@
                     <input type = text value = '<%=tasks.length%>' id = 'tasksize' name = 'tasksize' style = 'display: none'>
                     <input type = text value = '<%=project[0].project_id%>' id = 'proj_id' name = 'proj_id' style = 'display: none'>
                     <div class="row">
-                        <div class="col-md-2">
+                        <div class="col-md-1">
                             <h4 class="booking-item-title">Task Code</h4>
                         </div>
                         <div class="col-md-2">
@@ -224,11 +224,17 @@
                         <div class="col-md-1">
                             <h4 class="booking-item-title">Status</h4>
                         </div>
-                        <div class="col-md-2">
-                            <h4 class="booking-item-title">Approved</h4>
+                        <div class="col-md-1">
+                            <h4 class="booking-item-title">Approve</h4>
+                        </div>
+                        <div class="col-md-1">
+                            <h4 class="booking-item-title">Created Date</h4>
                         </div>
                         <div class="col-md-2">
-                            <h4 class="booking-item-title">Created Date</h4>
+                            <h4 class="booking-item-title">Ref Name</h4>
+                        </div>
+                        <div class="col-md-2">
+                            <h4 class="booking-item-title">Activity</h4>
                         </div>
                     </div>
                     <% for(i = 0;i < tasks.length;i++){ %>
@@ -244,7 +250,7 @@
                             <div class="row">
 
                                 <div class="row">
-                                    <div class="col-md-2">
+                                    <div class="col-md-1">
                                         <h5 class="booking-item-title"><%= tasks[i].task_code %></h5>
                                     </div>
                                     <div class="col-md-2">
@@ -282,7 +288,7 @@
                                             <%}%>
                                         </p>
                                     </div>
-                                    <div class="col-md-2">
+                                    <div class="col-md-1">
                                         <% if(tasks[i].approved == 'Y') {%>
                                         <p class="booking-item-description">Yes</p>
                                         <%} else  {%>
@@ -290,10 +296,15 @@
                                         <%}%>
 
                                     </div>
-                                    <div class="col-md-2">
+                                    <div class="col-md-1">
                                         <p class="booking-item-description" id = 'date<%=i%>' ></p>
                                     </div>
-
+                                    <div class="col-md-2">
+                                        <h5 class="booking-item-title"><%= tasks[i].refname %></h5>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <h5 class="booking-item-title"><%= tasks[i].activity %></h5>
+                                    </div>
                                 </div>
                                 <div class="col-md-3">
                                    <!-- <table>

@@ -575,15 +575,15 @@ module.exports.project_payment=function(req,res){
     ];
 
     var sql = 'SELECT p.project_id ,\n' +
-        '(select DATE_FORMAT(STR_TO_DATE((select min(create_time) from task where project_id = P.project_id), \'%Y%m%d\'), \'%m/%d/%Y\')) as start_date,\n' +
+        '(select DATE_FORMAT(STR_TO_DATE((select min(create_time) from task where project_id = p.project_id), \'%Y%m%d\'), \'%m/%d/%Y\')) as start_date,\n' +
         'p.project_name,\n' +
-        '(select concat(firstname,\' \',lastname) from user where user_id = P.customer_id) as customer,\n' +
+        '(select concat(firstname,\' \',lastname) from user where user_id = p.customer_id) as customer,\n' +
         '(select count(task_id) from task where project_id = p.project_id ) as tasks,\n' +
         '(select count(task_id) from task where project_id = p.project_id and approved = \'Y\') as task_approved,\n' +
         '(select count(task_id) from task where project_id = p.project_id and approved = \'N\') as task_not_approved,\n' +
         '(select DATE_FORMAT(STR_TO_DATE((SELECT CURDATE()+0), \'%Y%m%d\'), \'%m/%d/%Y\')) as date,\n' +
-        '(select sum(t.estimate*(select salary from user where user_id = t.assignee_id)) from task t where t.project_id = P.project_id and t.approved = \'Y\') as total\n' +
-        'FROM PROJECT P right JOIN  TASK T ON P.project_id = T.project_id group by project_id;';
+        '(select sum(t.estimate*(select salary from user where user_id = t.assignee_id)) from task t where t.project_id = p.project_id and t.approved = \'Y\') as total\n' +
+        'from project p right join  task t on p.project_id = t.project_id group by project_id;';
 
 
     var con = req.db.driver.db;
